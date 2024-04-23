@@ -1,6 +1,6 @@
 import { defineDb, defineTable, column } from 'astro:db';
 
-const Clientes = defineTable({
+const Clients = defineTable({
   columns: {
     id: column.number({primaryKey: true}),
     name: column.text({default: 'indefinido'}),
@@ -19,24 +19,32 @@ const Clientes = defineTable({
   },
 });
 
-/*
-const Cliente = {
-  id: column.text({primaryKey: true}),
-  name: column.text(),
-  email: column.text(),
-  tlf: column.text(),
-  address: column.text(),
-  postalCode: column.text(),
-  city: column.text(),
-  bornDate: column.date(),
-  createdAt: column.date(),
-  DNI: column.date(),
-  user: column.text(),
-  password: column.text(),
-};
-*/
+const Stundents = defineTable({
+  columns: {
+    'matriculation number': column.number({primaryKey: true}),
+  },
+});
+
+const Employee = defineTable({
+  columns: {
+    'social security': column.text({primaryKey: true}),
+  },
+});
+
+const Services = defineTable({
+  columns: {
+    ID: column.number({primaryKey: true}),
+    'social security': column.date({ references: () => Employee.columns['social security'] }),
+    name: column.text(),
+    price: column.number(),
+    duration: column.number(),
+    description: column.text(),
+    discipline: column.text(),
+    image: column.text(),
+  },
+});
 
 // https://astro.build/db/config
 export default defineDb({
-  tables: { Clientes }
+  tables: { Clients, Stundents, Employee, Services}
 });
