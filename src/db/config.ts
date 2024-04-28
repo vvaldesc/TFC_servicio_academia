@@ -1,9 +1,8 @@
-import type { boolean } from "astro/zod";
 import { defineDb, defineTable, column } from "astro:db";
 
 const Clients = defineTable({
   columns: {
-    ID: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true }),
     name: column.text({ default: "indefinido" }),
     surname: column.text({ default: "indefinido" }),
     email: column.text({ unique: true, optional: true }),
@@ -23,7 +22,7 @@ const Clients = defineTable({
 
 const Stundents = defineTable({
   columns: {
-    ID: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true }),
     matriculation_number: column.text({ primaryKey: true }),
     DNI: column.text(),
     employed: column.boolean({ default: false }),
@@ -48,7 +47,7 @@ const Stundents = defineTable({
 
 const Teachers = defineTable({
   columns: {
-    ID: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true }),
     is_admin: column.boolean({ default: false }),
     /*atributos de cliente*/
     name: column.text({ default: "indefinido" }),
@@ -71,17 +70,17 @@ const Teachers = defineTable({
 const Subjects = defineTable({
   columns: {
     acronym: column.text({ primaryKey: true }),
-    teacher_ID: column.number({ references: () => Teachers.columns.ID }),
-    course_ID: column.text({ references: () => Courses.columns.acronym }),
+    teacher_id: column.number({ references: () => Teachers.columns.id }),
+    course_id: column.text({ references: () => Courses.columns.acronym }),
     name: column.text(),
   },
 });
 
 const Employees = defineTable({
   columns: {
-    ID: column.number({ primaryKey: true }),
-    teacher_ID: column.number({ references: () => Teachers.columns.ID }),
-    student_ID: column.number({ references: () => Stundents.columns.ID }),
+    id: column.number({ primaryKey: true }),
+    teacher_id: column.number({ references: () => Teachers.columns.id }),
+    student_id: column.number({ references: () => Stundents.columns.id }),
     social_security: column.text({ unique: true }),
     salary: column.number({ default: 0 }),
   },
@@ -89,7 +88,7 @@ const Employees = defineTable({
 
 const Services = defineTable({
   columns: {
-    ID: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true }),
     name: column.text({ unique: true }),
     price: column.number(),
     duration: column.number(),
@@ -124,7 +123,7 @@ const Servers = defineTable({
   columns: {
     nickname: column.text({ primaryKey: true }),
     IP: column.text(),
-    ID: column.number({ references: () => Clients.columns.ID }),
+    id: column.number({ references: () => Clients.columns.id }),
   },
 });
 
@@ -140,8 +139,8 @@ const Courses = defineTable({
 
 const ClientTeacherTexts = defineTable({
   columns: {
-    client_ID: column.number({ references: () => Clients.columns.ID }),
-    teacher_ID: column.number({ references: () => Teachers.columns.ID }),
+    client_id: column.number({ references: () => Clients.columns.id }),
+    teacher_id: column.number({ references: () => Teachers.columns.id }),
     sent_from_client: column.boolean(),
     sent_from_teacher: column.boolean(),
     date: column.date()
@@ -150,9 +149,9 @@ const ClientTeacherTexts = defineTable({
 
 const ServiceConsumption = defineTable({
   columns: {
-    service_ID: column.number({ primaryKey: true, references: () => Services.columns.ID }),
-    employee_ID: column.number({ primaryKey:true, references: () => Employees.columns.ID }),
-    client_ID: column.number({ references: () => Clients.columns.ID }),
+    service_id: column.number({ primaryKey: true, references: () => Services.columns.id }),
+    employee_id: column.number({ primaryKey:true, references: () => Employees.columns.id }),
+    client_id: column.number({ references: () => Clients.columns.id }),
     rating: column.number({ optional: true }),
     price: column.number(),
     created_at: column.date(),
@@ -162,19 +161,19 @@ const ServiceConsumption = defineTable({
 
 const ClientServerConnections = defineTable({
   columns: {
-    client_ID: column.number({ references: () => Clients.columns.ID }),
-    server_ID: column.number({ references: () => Servers.columns.ID }),
+    client_id: column.number({ references: () => Clients.columns.id }),
+    server_id: column.number({ references: () => Servers.columns.id }),
     estimated_client_location: column.text({ optional: true }),
     device_type: column.text({ optional: true }),
-    file: column.text({ optional: true }),
-    date: column.date({ optional: true }),
+    file_download: column.text({ optional: true }),
+    created_at: column.date(),
     client_IP: column.text({ optional: true }),
   },
 });
 
 const StudentSubjectEnrolments = defineTable({
   columns: {
-    student_ID: column.number({ references: () => Stundents.columns.ID }),
+    student_id: column.number({ references: () => Stundents.columns.id }),
     subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
     date: column.date(),
   },
@@ -182,7 +181,7 @@ const StudentSubjectEnrolments = defineTable({
 
 const StudentSubjectFaults = defineTable({
   columns: {
-    student_ID: column.number({ references: () => Stundents.columns.ID }),
+    student_id: column.number({ references: () => Stundents.columns.id }),
     subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
     date: column.date(),
     justified: column.boolean(),
@@ -191,24 +190,17 @@ const StudentSubjectFaults = defineTable({
   },
 });
 
-const ClientArticleBookings = defineTable({
+const ClientArticleInteractions = defineTable({
   columns: {
-    client_ID: column.number({ references: () => Clients.columns.ID }),
+    client_id: column.number({ references: () => Clients.columns.id }),
     serial_number: column.text({ primaryKey: true, references: () => Articles.columns.serial_number }),
+    interaction_type: column.text(), // 'booking' or 'pickup'
     date: column.date(),
     updated_at: column.date({ optional: true }),
     discount: column.number({ optional: true }),
-  },
-});
-
-const ClientArticlePickups = defineTable({
-  columns: {
-    client_ID: column.number({ references: () => Clients.columns.ID }),
-    serial_number: column.text({ primaryKey: true, references: () => Articles.columns.serial_number }),
-    pickedup: column.boolean({ default: false}),
-    pickedup_date: column.date(),
-    pickingup_date: column.date(),
-    price: column.number(),
+    pickedup_date: column.date({ optional: true }),
+    pickingup_date: column.date({ optional: true }),
+    price: column.number({ optional: true }),
   },
 });
 
@@ -217,5 +209,5 @@ const ClientArticlePickups = defineTable({
 export default defineDb({
   tables:
    { Clients, Stundents, Employees, Services, Teachers, Subjects, Articles, Servers, Courses,
-    ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleBookings, ClientArticlePickups}
+    ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions}
 });
