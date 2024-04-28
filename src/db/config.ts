@@ -45,9 +45,10 @@ const Subjects = defineTable({
   },
 });
 
-const Employee = defineTable({
+const Employees = defineTable({
   columns: {
-    "social security": column.text({ primaryKey: true }),
+    ID: column.number({ primaryKey: true }),
+    "social security": column.text({ unique: true }),
     Salary: column.number({ default: 0 }),
     "matriculation number": column.text({ references: () => Stundents.columns["matriculation number"] }),
     NIP: column.text({ references: () => Teachers.columns.NIP }),
@@ -57,7 +58,7 @@ const Employee = defineTable({
 const Services = defineTable({
   columns: {
     ID: column.number({ primaryKey: true }),
-    social_security: column.text({ references: () => Employee.columns["social security"] }),
+    ID_employee: column.number({ references: () => Employees.columns.ID }),
     name: column.text({ unique: true }),
     price: column.number(),
     duration: column.number(),
@@ -115,12 +116,14 @@ const ClientClientTexts = defineTable({
   },
 });
 
-const ClientServiceReserve = defineTable({
+const ClientServiceEmployee = defineTable({
   columns: {
     consumer: column.number({ references: () => Clients.columns.ID }),
     service: column.number({ references: () => Services.columns.ID }),
+    employee: column.number({ references: () => Employees.columns.ID }),
     rating: column.number(),
-    tip: column.number({ default: 0 }),
+    date: column.date(),
+    hour: column.text(),
   },
 });
 
@@ -172,6 +175,6 @@ const ClientArticleDelivery = defineTable({
 // prettier-ignore
 export default defineDb({
   tables:
-   { Clients, Stundents, Employee, Services, Teachers, Subjects, Articles, Servers, Courses,
-     ClientClientTexts, ClientServiceReserve, ClientServerConnections, StudentSubjectEnrolments, ClientArticlePurchases, ClientArticleDelivery}
+   { Clients, Stundents, Employees, Services, Teachers, Subjects, Articles, Servers, Courses,
+     ClientClientTexts, ClientServiceEmployee, ClientServerConnections, StudentSubjectEnrolments, ClientArticlePurchases, ClientArticleDelivery}
 });
