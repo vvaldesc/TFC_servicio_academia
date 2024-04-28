@@ -23,7 +23,7 @@ const Clients = defineTable({
 const Stundents = defineTable({
   columns: {
     id: column.number({ primaryKey: true }),
-    matriculation_number: column.text({ primaryKey: true }),
+    matriculation_number: column.text({ unique: true }),
     DNI: column.text(),
     employed: column.boolean({ default: false }),
     educational_level: column.text(),
@@ -149,8 +149,8 @@ const ClientTeacherTexts = defineTable({
 
 const ServiceConsumption = defineTable({
   columns: {
-    service_id: column.number({ primaryKey: true, references: () => Services.columns.id }),
-    employee_id: column.number({ primaryKey:true, references: () => Employees.columns.id }),
+    service_id: column.number({ references: () => Services.columns.id }),
+    employee_id: column.number({ references: () => Employees.columns.id }),
     client_id: column.number({ references: () => Clients.columns.id }),
     rating: column.number({ optional: true }),
     price: column.number(),
