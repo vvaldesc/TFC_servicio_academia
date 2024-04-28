@@ -1,3 +1,4 @@
+import type { boolean } from "astro/zod";
 import { defineDb, defineTable, column } from "astro:db";
 
 const Clients = defineTable({
@@ -11,6 +12,7 @@ const Clients = defineTable({
     city: column.text({ optional: true }),
     bornDate: column.date({ optional: true }),
     created_at: column.date({ optional: true }),
+    updated_at: column.date({ optional: true }),
     username: column.text({ unique: true, optional: true }),
     password: column.text({ optional: true }),
     confirmed: column.boolean({ default: false }),
@@ -35,6 +37,7 @@ const Stundents = defineTable({
     city: column.text(),
     bornDate: column.date(),
     created_at: column.date(),
+    updated_at: column.date({ optional: true }),
     username: column.text({ unique: true }),
     password: column.text(),
     confirmed: column.boolean(),
@@ -56,6 +59,7 @@ const Teachers = defineTable({
     city: column.text(),
     bornDate: column.date(),
     created_at: column.date(),
+    updated_at: column.date({ optional: true }),
     username: column.text({ unique: true }),
     password: column.text(),
     confirmed: column.boolean(),
@@ -68,6 +72,7 @@ const Subjects = defineTable({
   columns: {
     acronym: column.text({ primaryKey: true }),
     teacher_ID: column.number({ references: () => Teachers.columns.ID }),
+    course_ID: column.text({ references: () => Courses.columns.acronym }),
     name: column.text(),
   },
 });
@@ -133,23 +138,25 @@ const Courses = defineTable({
   },
 });
 
-const ClientClientTexts = defineTable({
+const ClientTeacherTexts = defineTable({
   columns: {
-    sender: column.number({ references: () => Clients.columns.ID }),
-    receiver: column.number({ references: () => Clients.columns.ID }),
-    text: column.text(),
-    date: column.date(),
+    client_ID: column.number({ references: () => Clients.columns.ID }),
+    teacher_ID: column.number({ references: () => Teachers.columns.ID }),
+    sent_from_client: column.boolean(),
+    sent_from_teacher: column.boolean(),
+    date: column.date()
   },
 });
 
 const ServiceConsumption = defineTable({
   columns: {
-    consumer: column.number({ references: () => Clients.columns.ID }),
-    service: column.number({ primaryKey: true, references: () => Services.columns.ID }),
-    employee: column.number({ primaryKey:true, references: () => Employees.columns.ID }),
-    rating: column.number(),
-    date: column.date(),
-    hour: column.text(),
+    service_ID: column.number({ primaryKey: true, references: () => Services.columns.ID }),
+    employee_ID: column.number({ primaryKey:true, references: () => Employees.columns.ID }),
+    client_ID: column.number({ references: () => Clients.columns.ID }),
+    rating: column.number({ optional: true }),
+    price: column.number(),
+    created_at: column.date(),
+    updated_at: column.date({ optional: true }),
   },
 });
 
@@ -167,33 +174,41 @@ const ClientServerConnections = defineTable({
 
 const StudentSubjectEnrolments = defineTable({
   columns: {
-    student_ID: column.text({ references: () => Stundents.columns.matriculation_number }),
-    subject_acronym: column.text({
-      references: () => Subjects.columns.acronym,
-    }),
+    student_ID: column.number({ references: () => Stundents.columns.ID }),
+    subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
     date: column.date(),
   },
 });
 
-const ClientArticlePurchases = defineTable({
+const StudentSubjectFaults = defineTable({
+  columns: {
+    student_ID: column.number({ references: () => Stundents.columns.ID }),
+    subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
+    date: column.date(),
+    justified: column.boolean(),
+    justification: column.text({ optional: true }),
+    description: column.text({ optional: true }),
+  },
+});
+
+const ClientArticleBookings = defineTable({
   columns: {
     client_ID: column.number({ references: () => Clients.columns.ID }),
-    serial_number: column.text({ primaryKey: true }),
-    delivery: column.text({ optional: true }),
+    serial_number: column.text({ primaryKey: true, references: () => Articles.columns.serial_number }),
     date: column.date(),
+    updated_at: column.date({ optional: true }),
     discount: column.number({ optional: true }),
   },
 });
 
-const ClientArticleDelivery = defineTable({
+const ClientArticlePickups = defineTable({
   columns: {
     client_ID: column.number({ references: () => Clients.columns.ID }),
-    serial_number: column.text({ primaryKey: true }),
-    sent: column.boolean(),
-    recieved: column.boolean({ optional: true }),
-    recieving_date: column.date(),
-    rending_date: column.date(),
-    tracking_number: column.text(),
+    serial_number: column.text({ primaryKey: true, references: () => Articles.columns.serial_number }),
+    pickedup: column.boolean({ default: false}),
+    pickedup_date: column.date(),
+    pickingup_date: column.date(),
+    price: column.number(),
   },
 });
 
@@ -202,5 +217,5 @@ const ClientArticleDelivery = defineTable({
 export default defineDb({
   tables:
    { Clients, Stundents, Employees, Services, Teachers, Subjects, Articles, Servers, Courses,
-     ClientClientTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, ClientArticlePurchases, ClientArticleDelivery}
+    ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleBookings, ClientArticlePickups}
 });
