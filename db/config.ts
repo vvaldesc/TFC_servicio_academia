@@ -2,7 +2,7 @@ import { defineDb, defineTable, column } from "astro:db";
 
 const Clients = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     name: column.text({ default: "indefinido" }),
     surname: column.text({ default: "indefinido" }),
     email: column.text({ unique: true, optional: true }),
@@ -22,7 +22,7 @@ const Clients = defineTable({
 
 const Stundents = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     matriculation_number: column.text({ unique: true }),
     DNI: column.text(),
     employed: column.boolean({ default: false }),
@@ -47,7 +47,7 @@ const Stundents = defineTable({
 
 const Teachers = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     is_admin: column.boolean({ default: false }),
     /*atributos de cliente*/
     name: column.text({ default: "indefinido" }),
@@ -78,7 +78,7 @@ const Subjects = defineTable({
 
 const Employees = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     teacher_id: column.number({ references: () => Teachers.columns.id }),
     student_id: column.number({ references: () => Stundents.columns.id }),
     social_security: column.text({ unique: true }),
@@ -88,7 +88,7 @@ const Employees = defineTable({
 
 const Services = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     name: column.text({ unique: true }),
     price: column.number(),
     duration: column.number(),
