@@ -3,7 +3,6 @@ import { db, Clients } from 'astro:db';
 export default async function seed() {
   await db.insert(Clients).values([
     { 
-      id: 1, 
       name: 'Nombre Cliente', 
       surname: 'Apellido Cliente', 
       email: 'cliente@email.com', 
@@ -20,7 +19,6 @@ export default async function seed() {
       active: true 
     },
     { 
-      id: 2, 
       name: 'Nombre Cliente 2', 
       surname: 'Apellido Cliente 2', 
       email: 'cliente2@email.com', 
