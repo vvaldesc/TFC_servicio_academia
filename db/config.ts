@@ -20,7 +20,7 @@ const Clients = defineTable({
   },
 });
 
-const Stundents = defineTable({
+const Students = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
     matriculation_number: column.text({ unique: true }),
@@ -80,7 +80,7 @@ const Employees = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
     teacher_id: column.number({ references: () => Teachers.columns.id }),
-    student_id: column.number({ references: () => Stundents.columns.id }),
+    student_id: column.number({ references: () => Students.columns.id }),
     social_security: column.text({ unique: true }),
     salary: column.number({ default: 0 }),
   },
@@ -123,6 +123,7 @@ const Servers = defineTable({
   columns: {
     nickname: column.text({ primaryKey: true }),
     IP: column.text(),
+    Port: column.number(),
     id: column.number({ references: () => Clients.columns.id }),
   },
 });
@@ -143,6 +144,7 @@ const ClientTeacherTexts = defineTable({
     teacher_id: column.number({ references: () => Teachers.columns.id }),
     sent_from_client: column.boolean(),
     sent_from_teacher: column.boolean(),
+    message: column.text(),
     date: column.date()
   },
 });
@@ -162,7 +164,7 @@ const ServiceConsumption = defineTable({
 const ClientServerConnections = defineTable({
   columns: {
     client_id: column.number({ references: () => Clients.columns.id }),
-    server_id: column.number({ references: () => Servers.columns.id }),
+    server_nick: column.text({ references: () => Servers.columns.nickname }),
     estimated_client_location: column.text({ optional: true }),
     device_type: column.text({ optional: true }),
     file_download: column.text({ optional: true }),
@@ -173,7 +175,7 @@ const ClientServerConnections = defineTable({
 
 const StudentSubjectEnrolments = defineTable({
   columns: {
-    student_id: column.number({ references: () => Stundents.columns.id }),
+    student_id: column.number({ references: () => Students.columns.id }),
     subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
     date: column.date(),
   },
@@ -181,7 +183,7 @@ const StudentSubjectEnrolments = defineTable({
 
 const StudentSubjectFaults = defineTable({
   columns: {
-    student_id: column.number({ references: () => Stundents.columns.id }),
+    student_id: column.number({ references: () => Students.columns.id }),
     subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
     date: column.date(),
     justified: column.boolean(),
@@ -208,6 +210,6 @@ const ClientArticleInteractions = defineTable({
 // prettier-ignore
 export default defineDb({
   tables:
-   { Clients, Stundents, Employees, Services, Teachers, Subjects, Articles, Servers, Courses,
+   { Clients, Students, Employees, Services, Teachers, Subjects, Articles, Servers, Courses,
     ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions}
 });
