@@ -156,6 +156,7 @@ const ServiceConsumption = defineTable({
     client_id: column.number({ references: () => Clients.columns.id }),
     rating: column.number({ optional: true }),
     price: column.number(),
+    delay: column.number({ optional: true }),
     created_at: column.date(),
     updated_at: column.date({ optional: true }),
   },

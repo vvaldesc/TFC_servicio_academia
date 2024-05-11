@@ -1,16 +1,29 @@
-//import type { APIRoute } from "astro";
-import { db, Clients } from "astro:db";
+// Importa db y Clients desde "astro:db"
+import { db, Clients, eq } from "astro:db";
+import type { APIRoute } from "astro";
 
-//api/clientes/id
-export const GET = async () => {
-  const clients = await db.select().from(Clients).where({ ID: 1 });
-  
+// api/clientes/[id].ts
+export const GET: APIRoute = async ({ params }) => {
+	const { id } = params
+
+  const client = await db
+    .select()
+    .from(Clients)
+    .where(eq(Clients.id, Number(id)));
+
   let status: number = 404;
-  let msg: string | typeof clients = "";
-  
-  clients.length == 0 ? msg = "No hay clientes" : (msg = clients, status = 200);
+  let msg: string | typeof client = "";
 
-  return new Response(JSON.stringify({ result: msg, count: clients.length }), {
+  // Verifica si se encontraron clientes y actualiza el mensaje y el estado correspondientemente
+  if (client.length == 0) {
+    msg = "No hay clientes";
+  } else {
+    msg = client;
+    status = 200;
+  }
+
+  // Retorna la respuesta con el resultado de la consulta
+  return new Response(JSON.stringify({ result: msg, count: client.length }), {
     status: status,
     headers: {
       "content-type": "application/json",
