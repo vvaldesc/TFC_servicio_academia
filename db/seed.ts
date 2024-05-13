@@ -6,7 +6,7 @@ export default async function seed() {
     { 
       name: 'John Doe', 
       surname: 'Doe', 
-      email: 'johndoe@example.com', 
+      email: 'victorvaldescobos@gmail.com', 
       phone_number: '123456789', 
       address: '123 Main St', 
       city: 'New York', 
@@ -17,7 +17,7 @@ export default async function seed() {
       password: 'password123', 
       confirmed: true, 
       image: 'https://example.com/johndoe.jpg', 
-      active: true 
+      active: false 
     },
     { 
       name: 'Jane Smith', 
@@ -579,8 +579,7 @@ export default async function seed() {
   ]);
 
 
-  await db.insert(ClientServerConnections).values([
-  ]);
+  // await db.insert(ClientServerConnections).values([]);
 
 
   await db.insert(StudentSubjectEnrolments).values([
