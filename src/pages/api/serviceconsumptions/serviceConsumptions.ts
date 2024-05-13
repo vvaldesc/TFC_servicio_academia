@@ -1,14 +1,17 @@
 import { db, ServiceConsumption } from "astro:db";
 
 export const GET = async () => {
-  const serviceConsumption = await db.select().from(ServiceConsumption);
+  const serviceConsumptions = await db.select().from(ServiceConsumption);
   
   let status: number = 404;
-  let msg: string | typeof serviceConsumption = "";
-  
-  serviceConsumption.length == 0 ? msg = "No hay clientes" : (msg = serviceConsumption, status = 200);
+  let result = {
+    serviceConsumptions: "No hay clientes" as string | typeof serviceConsumptions,
+    table: "ServiceConsumption" as string,
+    count: serviceConsumptions.length as number,
+  };  
+  serviceConsumptions.length > 0 && ((result.serviceConsumptions = serviceConsumptions), (status = 200));
 
-  return new Response(JSON.stringify({ result: msg, count: serviceConsumption.length }), {
+  return new Response(JSON.stringify({ result }), {
     status: status,
     headers: {
       "content-type": "application/json",
