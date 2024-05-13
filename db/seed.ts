@@ -579,8 +579,8 @@ export default async function seed() {
   ]);
 
 
-  await db.insert(ClientServerConnections).values([
-  ]);
+  /*await db.insert(ClientServerConnections).values([
+  ]);*/
 
 
   await db.insert(StudentSubjectEnrolments).values([

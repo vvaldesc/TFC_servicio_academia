@@ -1,8 +1,6 @@
-// Importa db y Clients desde "astro:db"
 import { db, Clients, eq } from "astro:db";
 import type { APIRoute } from "astro";
 
-// api/clientes/[id].ts
 export const GET: APIRoute = async ({ params }) => {
 	const { id } = params
 
