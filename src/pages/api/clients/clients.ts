@@ -6,7 +6,7 @@ export const GET = async () => {
 
   let status: number = 404;
   let result: Result = {
-    data: "No hay clientes" as string | typeof clients,
+    data: "undefined" as string | typeof clients,
     table: "Clients" as string,
     count: clients.length as number,
   };

@@ -1,29 +1,27 @@
-// Importa db y Clients desde "astro:db"
 import { db, Clients, eq } from "astro:db";
 import type { APIRoute } from "astro";
+import type { Result } from "@/consts/types";
 
-// api/clientes/[id].ts
 export const GET: APIRoute = async ({ params }) => {
 	const { email } = params
 
   const client = await db
     .select()
     .from(Clients)
-    .where(eq(Clients.email, String(email)));
+    .where(eq(Clients.email, email as string));
 
   let status: number = 404;
-  let msg: string | typeof client = "";
-
+  let result: Result = {
+    data: "undefined" as string | typeof client,
+    table: "Clients" as string,
+    count: client.length as number,
+  };
   // Verifica si se encontraron clientes y actualiza el mensaje y el estado correspondientemente
-  if (client.length == 0) {
-    msg = "No hay clientes";
-  } else {
-    msg = client;
-    status = 200;
-  }
+  client.length == 1 && ((result.data = client), (status = 200));
+
 
   // Retorna la respuesta con el resultado de la consulta
-  return new Response(JSON.stringify({ result: msg, count: client.length }), {
+  return new Response(JSON.stringify({result}), {
     status: status,
     headers: {
       "content-type": "application/json",
