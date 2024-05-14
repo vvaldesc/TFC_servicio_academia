@@ -1,8 +1,8 @@
-import { db, Clients } from "astro:db";
+import { db, Clients, Students,Teachers } from "astro:db";
 import type { Result } from "@/consts/types";
 
 export const GET = async () => {
-  const clients = await db.select().from(Clients);
+  const clients = await db.select().from(Teachers);
 
   let status: number = 404;
   let result: Result = {
