@@ -18,7 +18,7 @@ export interface SqlProfileByEmail {
   lastInsertRowid: null;
 }
 
-export interface Client {
+export interface Client_type {
   id: number;
   name?: string;
   surname?: string;
@@ -35,4 +35,16 @@ export interface Client {
   image?: string;
   active?: boolean;
   [key: string]: any;
+}
+
+export interface ServiceConsumption_type {
+  _id:         number;
+  service_id:  number;
+  employee_id: number;
+  client_id?:   number;
+  rating?:      number;
+  price?:       number;
+  delay?:       number;
+  created_at?:  Date;
+  updated_at?:  Date;
 }

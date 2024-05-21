@@ -1,6 +1,6 @@
 import { db, Clients } from "astro:db";
 import type { APIRoute } from "astro";
-import type { Result, Client } from "@/consts/types";
+import type { Result, Client_type } from "@/consts/types";
 
 export const GET = async () => {
   const clients = await db.select().from(Clients);
@@ -24,13 +24,13 @@ export const GET = async () => {
 
 export const POST: APIRoute = async (request) => {
   let result: Result = {
-    data: "undefined" as string | Client,
+    data: "undefined" as string | Client_type,
     table: "Clients" as string,
     count: 0,
   };
   let status: number = 404;
   try {
-    const client: Client = await request.request.json();
+    const client: Client_type = await request.request.json();
     console.log(client);
     //@ts-ignore
     client.bornDate = new Date(client.bornDate);
