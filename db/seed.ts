@@ -1,4 +1,4 @@
-import { db, Clients, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Courses, ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
+import { db, Clients, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Courses, ClientTeacherTexts, ServiceConsumption, Reservations, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
 
 export default async function seed() {
   
@@ -575,6 +575,49 @@ export default async function seed() {
       delay: 21,
       created_at: new Date(),
       updated_at: new Date(),
+    },
+  ]);
+
+  await db.insert(Reservations).values([
+    {
+      client_id: 1,
+      service_id: 1,
+      employee_id: 1,
+      reservation_date: new Date(2022, 1, 1),
+      reservation_time: '10:00',
+      status: 'confirmed',
+    },
+    {
+      client_id: 2,
+      service_id: 2,
+      employee_id: 2,
+      reservation_date: new Date(2022, 1, 2),
+      reservation_time: '11:00',
+      status: 'pending',
+    },
+    {
+      client_id: 1,
+      service_id: 3,
+      employee_id: 3,
+      reservation_date: new Date(2022, 1, 3),
+      reservation_time: '12:00',
+      status: 'cancelled',
+    },
+    {
+      client_id: 2,
+      service_id: 4,
+      employee_id: 4,
+      reservation_date: new Date(2022, 1, 4),
+      reservation_time: '13:00',
+      status: 'confirmed',
+    },
+    {
+      client_id: 1,
+      service_id: 5,
+      employee_id: 5,
+      reservation_date: new Date(2022, 1, 5),
+      reservation_time: '14:00',
+      status: 'pending',
     },
   ]);
 

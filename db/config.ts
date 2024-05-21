@@ -162,6 +162,18 @@ const ServiceConsumption = defineTable({
   },
 });
 
+const Reservations = defineTable({
+  columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
+    service_id: column.number({ references: () => Services.columns.id }),
+    employee_id: column.number({ references: () => Employees.columns.id }),
+    client_id: column.number({ references: () => Clients.columns.id }),
+    reservation_date: column.date(),
+    reservation_time: column.text(),
+    status: column.text({ default: 'pending' }), // 'pending', 'confirmed', 'cancelled'
+  },
+});
+
 const ClientServerConnections = defineTable({
   columns: {
     client_id: column.number({ references: () => Clients.columns.id }),
@@ -212,5 +224,5 @@ const ClientArticleInteractions = defineTable({
 export default defineDb({
   tables:
    { Clients, Students, Employees, Services, Teachers, Subjects, Articles, Servers, Courses,
-    ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions}
+    ClientTeacherTexts, ServiceConsumption, Reservations, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions}
 });
