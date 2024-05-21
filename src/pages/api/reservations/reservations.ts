@@ -1,18 +1,18 @@
-import { db, ServiceConsumption } from "astro:db";
+import { db, Reservations } from "astro:db";
 import type { APIRoute } from "astro";
-import type { Result, ServiceConsumption_type } from "@/consts/types";
+import type { Result, Reservations_type } from "@/consts/types";
 
 export const GET = async () => {
-  const serviceConsumptions = await db.select().from(ServiceConsumption);
+  const reservations = await db.select().from(Reservations);
 
   let status: number = 404;
   let result: Result = {
-    data: "undefined" as string | typeof serviceConsumptions,
+    data: "undefined" as string | typeof reservations,
     table: "ServiceConsumption" as string,
-    count: serviceConsumptions.length as number,
+    count: reservations.length as number,
   };
 
-  serviceConsumptions.length > 0 && ((result.data = serviceConsumptions), (status = 200));
+  reservations.length > 0 && ((result.data = reservations), (status = 200));
 
   return new Response(JSON.stringify({ result }), {
     status: status,
@@ -24,25 +24,28 @@ export const GET = async () => {
 
 export const POST: APIRoute = async (request) => {
   let result: Result = {
-    data: "undefined" as string | ServiceConsumption_type,
+    data: "undefined" as string | Reservations_type,
     table: "ServiceConsumption" as string,
     count: 0,
   };
   let status: number = 404;
   try {
-    const serviceConsumptions: ServiceConsumption_type = await request.request.json();
-    console.log(serviceConsumptions);
+    const reservations: Reservations_type = await request.request.json();
+    console.log(reservations);
     //@ts-ignore
-    serviceConsumptions.created_at = new Date(serviceConsumptions.created_at);
+    reservations.created_at = new Date(serviceConsumptions.created_at);
     //@ts-ignore
-    serviceConsumptions.updated_at = new Date(serviceConsumptions.updated_at);
-    const response = await db.insert(ServiceConsumption).values(serviceConsumptions).onConflictDoNothing();
+    reservations.updated_at = new Date(serviceConsumptions.updated_at);
+    const response = await db.insert(Reservations).values(reservations).onConflictDoUpdate({
+      target: Reservations.id,
+      set: reservations,
+    });
     //@ts-ignore
     // serviceConsumptions.id = String(response.columns);
 
-    if (serviceConsumptions) {
+    if (reservations) {
       status = 201;
-      result.data = serviceConsumptions;
+      result.data = reservations;
     }
 
     return new Response(JSON.stringify({ result }), {
