@@ -31,13 +31,13 @@ export const POST: APIRoute = async (request) => {
   let status: number = 404;
   try {
     const client: Client_type = await request.request.json();
-    console.log(client);
     //@ts-ignore
     client.bornDate = new Date(client.bornDate);
     //@ts-ignore
-    client.created_at = new Date(client.created_at);
+    client.created_at = new Date();
     //@ts-ignore
-    client.updated_at = new Date(client.updated_at);
+    client.updated_at = new Date();
+    console.log(client);
     const response = await db.insert(Clients).values(client).onConflictDoUpdate({
       target: Clients.id,
       set: client,
