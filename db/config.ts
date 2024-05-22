@@ -159,6 +159,8 @@ const ServiceConsumption = defineTable({
     delay: column.number({ optional: true }),
     created_at: column.date(),
     updated_at: column.date({ optional: true }),
+    reserved_at: column.date(),
+    state: column.text({ default: 'pending' }),
   },
 });
 
