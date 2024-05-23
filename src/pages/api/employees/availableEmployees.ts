@@ -4,8 +4,8 @@ import type { Result } from "@/consts/types";
 
 export const POST: APIRoute = async (request) => {
   let dateTime: Date = await request.request.json();
-  console.log(new Date(dateTime.date));
   dateTime = new Date(dateTime.date);
+  console.log(dateTime);
 
   let status: number = 404;
   let result: Result = {
