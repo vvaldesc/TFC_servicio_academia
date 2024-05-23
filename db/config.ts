@@ -79,8 +79,8 @@ const Subjects = defineTable({
 const Employees = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
-    teacher_id: column.number({ references: () => Teachers.columns.id }),
-    student_id: column.number({ references: () => Students.columns.id }),
+    teacher_id: column.number({ optional: true, references: () => Teachers.columns.id }),
+    student_id: column.number({ optional: true, references: () => Students.columns.id }),
     social_security: column.text({ unique: true }),
     salary: column.number({ default: 0 }),
   },

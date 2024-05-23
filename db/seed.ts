@@ -440,33 +440,48 @@ export default async function seed() {
   await db.insert(Employees).values([
     {
       teacher_id: 1,
-      student_id: 1,
       social_security: '123456789',
       salary: 5000,
     },
     {
       teacher_id: 2,
-      student_id: 2,
       social_security: '987654321',
       salary: 6000,
     },
     {
       teacher_id: 3,
-      student_id: 3,
       social_security: '111111111',
       salary: 5500,
     },
     {
       teacher_id: 4,
-      student_id: 4,
       social_security: '222222222',
       salary: 5200,
     },
     {
       teacher_id: 5,
-      student_id: 5,
       social_security: '333333333',
       salary: 5300,
+    },
+    {
+      student_id: 1,
+      social_security: '123456784',
+    },
+    {
+      student_id: 2,
+      social_security: '987654322',
+    },
+    {
+      student_id: 3,
+      social_security: '111111112',
+    },
+    {
+      student_id: 4,
+      social_security: '222222223',
+    },
+    {
+      student_id: 5,
+      social_security: '333333334',
     },
   ]);
 
