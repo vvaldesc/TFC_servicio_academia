@@ -4,7 +4,7 @@ import type { Result, ServiceConsumption_type } from "@/consts/types";
 
 export const GET = async () => {
   const serviceConsumptions = await db.select().from(ServiceConsumption);
-
+  console.log(serviceConsumptions);
   let status: number = 404;
   let result: Result = {
     data: "undefined" as string | typeof serviceConsumptions,

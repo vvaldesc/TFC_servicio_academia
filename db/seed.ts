@@ -539,6 +539,9 @@ export default async function seed() {
     },
   ]);
 
+  let today = new Date();
+  today.setHours(22, 0, 0, 0); // 20 es para las 8 de la tarde
+  today.setDate(today.getDate()+1);
 
   await db.insert(ServiceConsumption).values([
     {
@@ -549,18 +552,18 @@ export default async function seed() {
       price: 100.0,
       delay: 0,
       created_at: new Date(2022, 1, 1),
-      reserved_at: new Date(2022, 1, 1),
+      reserved_at: today,
       state: 'confirmed',
     },
     {
       service_id: 2,
-      employee_id: 2,
+      employee_id: 1,
       client_id: 1,
       rating: 3.0,
       price: 200.0,
-      delay: 10,
+      delay: 19,
       created_at: new Date(2022, 1, 2),
-      reserved_at: new Date(2022, 1, 2),
+      reserved_at: today,
       state: 'cancelled',
     },
     {
@@ -571,7 +574,7 @@ export default async function seed() {
       price: 150.0,
       delay: 0,
       created_at: new Date(2022, 1, 3),
-      reserved_at: new Date(2022, 1, 3),
+      reserved_at: today,
       state: 'confirmed',
     },
     {
@@ -582,7 +585,7 @@ export default async function seed() {
       price: 250.0,
       delay: 5,
       created_at: new Date(2022, 1, 4),
-      reserved_at: new Date(2022, 1, 4),
+      reserved_at: today,
       state: 'pending',
     },
     {
@@ -593,7 +596,7 @@ export default async function seed() {
       price: 300.0,
       delay: 0,
       created_at: new Date(2022, 1, 5),
-      reserved_at: new Date(2022, 1, 5),
+      reserved_at: today,
       state: 'confirmed',
     },
   ]);

@@ -1,36 +1,28 @@
-import { db, eq, Employees, Teachers, Students, StudentSubjectEnrolments, Courses, Subjects, alias } from "astro:db";
+import { db, eq, Employees, Teachers, Students } from "astro:db";
 import type { APIRoute } from "astro";
 import type { Result } from "@/consts/types";
 
 export const GET = async () => {
-
-
   const employees
   = 
   await db.select()
   .from(Employees)
   .leftJoin(Teachers, eq(Employees.teacher_id, Teachers.id))
-  .leftJoin(Subjects, eq(Teachers.id, Subjects.teacher_id))
-  .leftJoin(alias(Courses, 'TeacherCourses'), eq(Subjects.course_id, 'TeacherCourses.acronym'))
   .leftJoin(Students, eq(Employees.student_id, Students.id))
-  .leftJoin(StudentSubjectEnrolments, eq(Students.id, StudentSubjectEnrolments.student_id))
-  .leftJoin(alias(Subjects, 'StudentSubjects'), eq(StudentSubjectEnrolments.subject_acronym, 'Subjects2.acronym'))
-  .leftJoin(alias(Courses, 'StudentCourses'), eq('StudentSubjects.course_id', 'StudentCourses.acronym'))
   .orderBy(Employees.id);
 
+  console.log(employees);
+
   const combinedEmployees = employees.map(employee => {
+    let role = employee.Employees.teacher_id ? "teacher" : (employee.Employees.student_id ? "student" : null);
     return {
       ...employee.Employees,
+      role: role,
       teacher: {
         ...employee.Teachers,
-        subject: employee.Subjects,
-        course: employee.TeacherCourses
       },
       student: {
         ...employee.Students,
-        subjectEnrolment: employee.StudentSubjectEnrolments,
-        subject: employee.StudentSubjects,
-        course: employee.StudentCourses
       }
     };
   });
@@ -44,7 +36,7 @@ export const GET = async () => {
 
   if (employees.length > 0) {
     result.data = combinedEmployees;
-    result.count = employees.length;
+    result.count = combinedEmployees.length;
     status = 200;
   }
   

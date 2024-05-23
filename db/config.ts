@@ -76,6 +76,16 @@ const Subjects = defineTable({
   },
 });
 
+const Courses = defineTable({
+  columns: {
+    acronym: column.text({ primaryKey: true }),
+    attendance_threshold: column.number(),
+    educational_level: column.text(),
+    duration: column.number(),
+    practical_hours: column.number(),
+  },
+});
+
 const Employees = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
@@ -125,16 +135,6 @@ const Servers = defineTable({
     IP: column.text(),
     Port: column.number(),
     id: column.number({ references: () => Clients.columns.id }),
-  },
-});
-
-const Courses = defineTable({
-  columns: {
-    acronym: column.text({ primaryKey: true }),
-    attendance_threshold: column.number(),
-    educational_level: column.text(),
-    duration: column.number(),
-    practical_hours: column.number(),
   },
 });
 
