@@ -18,6 +18,23 @@ export const GET = async () => {
   .leftJoin(alias(Courses, 'StudentCourses'), eq('StudentSubjects.course_id', 'StudentCourses.acronym'))
   .orderBy(Employees.id);
 
+  const combinedEmployees = employees.map(employee => {
+    return {
+      ...employee.Employees,
+      teacher: {
+        ...employee.Teachers,
+        subject: employee.Subjects,
+        course: employee.TeacherCourses
+      },
+      student: {
+        ...employee.Students,
+        subjectEnrolment: employee.StudentSubjectEnrolments,
+        subject: employee.StudentSubjects,
+        course: employee.StudentCourses
+      }
+    };
+  });
+
   let status: number = 404;
   let result: Result = {
     data: "undefined",
@@ -26,7 +43,7 @@ export const GET = async () => {
   };
 
   if (employees.length > 0) {
-    result.data = employees;
+    result.data = combinedEmployees;
     result.count = employees.length;
     status = 200;
   }
