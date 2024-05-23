@@ -38,13 +38,14 @@ export interface Client_type {
 }
 
 export interface ServiceConsumption_type {
-  _id:         number;
+  id:         number;
   service_id:  number;
   employee_id: number;
-  client_id?:   number;
+  client_id:   number;
   rating?:      number;
-  price?:       number;
+  price:       number;
   delay?:       number;
-  created_at?:  Date;
+  created_at:  Date;
   updated_at?:  Date;
+  reserved_at:  Date;
 }

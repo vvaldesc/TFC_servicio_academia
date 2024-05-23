@@ -134,12 +134,12 @@ const Servers = defineTable({
     nickname: column.text({ primaryKey: true }),
     IP: column.text(),
     Port: column.number(),
-    id: column.number({ references: () => Clients.columns.id }),
   },
 });
 
 const ClientTeacherTexts = defineTable({
   columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     client_id: column.number({ references: () => Clients.columns.id }),
     teacher_id: column.number({ references: () => Teachers.columns.id }),
     sent_from_client: column.boolean(),
@@ -151,6 +151,7 @@ const ClientTeacherTexts = defineTable({
 
 const ServiceConsumption = defineTable({
   columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     service_id: column.number({ references: () => Services.columns.id }),
     employee_id: column.number({ references: () => Employees.columns.id }),
     client_id: column.number({ references: () => Clients.columns.id }),
@@ -178,6 +179,7 @@ const Reservations = defineTable({
 
 const ClientServerConnections = defineTable({
   columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     client_id: column.number({ references: () => Clients.columns.id }),
     server_nick: column.text({ references: () => Servers.columns.nickname }),
     estimated_client_location: column.text({ optional: true }),
@@ -190,6 +192,7 @@ const ClientServerConnections = defineTable({
 
 const StudentSubjectEnrolments = defineTable({
   columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     student_id: column.number({ references: () => Students.columns.id }),
     subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
     date: column.date(),
@@ -198,6 +201,7 @@ const StudentSubjectEnrolments = defineTable({
 
 const StudentSubjectFaults = defineTable({
   columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
     student_id: column.number({ references: () => Students.columns.id }),
     subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
     date: column.date(),
@@ -209,8 +213,8 @@ const StudentSubjectFaults = defineTable({
 
 const ClientArticleInteractions = defineTable({
   columns: {
-    client_id: column.number({ references: () => Clients.columns.id }),
     serial_number: column.text({ primaryKey: true, references: () => Articles.columns.serial_number }),
+    client_id: column.number({ references: () => Clients.columns.id }),
     interaction_type: column.text(), // 'booking' or 'pickup'
     date: column.date(),
     updated_at: column.date({ optional: true }),

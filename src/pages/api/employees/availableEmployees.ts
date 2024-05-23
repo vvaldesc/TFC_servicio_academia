@@ -3,8 +3,8 @@ import type { APIRoute } from "astro";
 import type { Result } from "@/consts/types";
 
 export const POST: APIRoute = async (request) => {
-  let dateTime: Date = await request.request.json();
-  dateTime = new Date(dateTime.date);
+  let req: any = await request.request.json();
+  const dateTime: Date = new Date(req.date);
   console.log(dateTime);
 
   let status: number = 404;
@@ -28,7 +28,7 @@ export const POST: APIRoute = async (request) => {
   .where(eq(ServiceConsumption.reserved_at, dateTime))
   .orderBy(Employees.id);
 
-  if (employees.length > 0) {
+  if (employees) {
     result.data = employees;
     result.count = employees.length;
     status = 200;

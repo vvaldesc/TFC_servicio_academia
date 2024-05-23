@@ -31,18 +31,26 @@ export const POST: APIRoute = async (request) => {
   let status: number = 404;
   try {
     const serviceConsumptions: ServiceConsumption_type = await request.request.json();
+    //@ts-ignore
+    serviceConsumptions.created_at = new Date();
+    //@ts-ignore
+    serviceConsumptions.updated_at = new Date();
+    //@ts-ignore
+    serviceConsumptions.reserved_at = new Date(serviceConsumptions.reserved_at); // Corregido aquí
     console.log(serviceConsumptions);
-    //@ts-ignore
-    serviceConsumptions.created_at = new Date(serviceConsumptions.created_at);
-    //@ts-ignore
-    serviceConsumptions.updated_at = new Date(serviceConsumptions.updated_at);
-    const response = await db.insert(ServiceConsumption).values(serviceConsumptions).onConflictDoNothing();
+
+    const response = await db.insert(ServiceConsumption).values(serviceConsumptions).onConflictDoUpdate({
+      target: ServiceConsumption.id,
+      set: serviceConsumptions,
+    });
     //@ts-ignore
     // serviceConsumptions.id = String(response.columns);
 
     if (serviceConsumptions) {
       status = 201;
-      result.data = serviceConsumptions;
+      result.data = response;
+      result.table= "ServiceConsumption";
+      result.count = 1;
     }
 
     return new Response(JSON.stringify({ result }), {
