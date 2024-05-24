@@ -57,3 +57,34 @@ export interface ServiceConsumption_type {
   reserved_at:  Date;
   weather?:     Weather;
 }
+
+export interface ServicePredictionPost_type {
+  id?:                   number;
+  client_id?:            number;
+  teacher_id?:           number;
+  student_id?:           null;
+  delay?:                null;
+  service_id?:           number;
+  created_at?:           Date;
+  updated_at?:           null;
+  reserved_at?:          Date;
+  rating?:               null;
+  price?:                number;
+  weather?:              string;
+  client_name?:          string;
+  teacher_name?:         string;
+  student_name?:         null;
+  client_surname?:       string;
+  teacher_surname?:      string;
+  student_surname?:      null;
+  client_address?:       string;
+  teacher_address?:      string;
+  student_address?:      null;
+  client_phone_number?:  string;
+  teacher_phone_number?: string;
+  student_phone_number?: null;
+  client_email?:         string;
+  teacher_email?:        string;
+  student_email?:        null;
+  employee_salary?:      number;
+}

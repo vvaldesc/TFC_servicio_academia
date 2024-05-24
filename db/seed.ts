@@ -106,7 +106,7 @@ export default async function seed() {
   }
 
   const serviceConsumptionRecords = [];
-  for (let i = 0; i < 2000; i++) {
+  for (let i = 0; i < 100; i++) {
     const weather = Math.random() < 0.33 ? Weather.Snowy : (Math.random() < 0.5 ? Weather.Sunny : Weather.Cloudy);
     const delay = weather === Weather.Snowy ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20);
     const record = {
