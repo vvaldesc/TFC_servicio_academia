@@ -162,6 +162,7 @@ const ServiceConsumption = defineTable({
     updated_at: column.date({ optional: true }),
     reserved_at: column.date(),
     state: column.text({ default: 'pending' }),
+    weather: column.text({ optional: true }),
   },
 });
 

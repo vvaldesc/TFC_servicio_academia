@@ -1,6 +1,129 @@
 import { db, Clients, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Courses, ClientTeacherTexts, ServiceConsumption, Reservations, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
+import { Weather } from '../src/consts/types';
 
 export default async function seed() {
+
+  let today = new Date();
+  today.setHours(22, 0, 0, 0); // 20 es para las 8 de la tarde
+  today.setDate(today.getDate()+1);
+
+  const teacherRecords = [
+    {   
+      id: 1,
+      name: 'John Smith', 
+      surname: 'Smith', 
+      email: 'johnsmith@example.com', 
+      phone_number: '111111111', 
+      address: '789 Oak St', 
+      city: 'Chicago', 
+      bornDate: new Date('1980-01-01'), 
+      created_at: new Date(), 
+      updated_at: new Date(), 
+      username: 'johnsmith', 
+      password: 'password789', 
+      confirmed: true, 
+      image: 'https://example.com/johnsmith.jpg', 
+      active: true 
+    },
+    { 
+      id: 2,
+      name: 'Emily Johnson', 
+      surname: 'Johnson', 
+      email: 'emilyjohnson@example.com', 
+      phone_number: '222222222', 
+      address: '321 Pine St', 
+      city: 'San Francisco', 
+      bornDate: new Date('1975-01-01'), 
+      created_at: new Date(), 
+      updated_at: new Date(), 
+      username: 'emilyjohnson', 
+      password: 'password101', 
+      confirmed: true, 
+      image: 'https://example.com/emilyjohnson.jpg', 
+      active: true 
+    },
+    { 
+      id: 3,
+      name: 'Michael Brown', 
+      surname: 'Brown', 
+      email: 'michaelbrown@example.com', 
+      phone_number: '333333333', 
+      address: '987 Maple St', 
+      city: 'Seattle', 
+      bornDate: new Date('1970-01-01'), 
+      created_at: new Date(), 
+      updated_at: new Date(), 
+      username: 'michaelbrown', 
+      password: 'password202', 
+      confirmed: true, 
+      image: 'https://example.com/michaelbrown.jpg', 
+      active: true 
+    },
+    { 
+      id: 4,
+      name: 'Sarah Davis', 
+      surname: 'Davis', 
+      email: 'sarahdavis@example.com', 
+      phone_number: '444444444', 
+      address: '654 Walnut St', 
+      city: 'Boston', 
+      bornDate: new Date('1965-01-01'), 
+      created_at: new Date(), 
+      updated_at: new Date(), 
+      username: 'sarahdavis', 
+      password: 'password303', 
+      confirmed: true, 
+      image: 'https://example.com/sarahdavis.jpg', 
+      active: true 
+    },
+    { 
+      id: 5,
+      name: 'David Wilson', 
+      surname: 'Wilson', 
+      email: 'davidwilson@example.com', 
+      phone_number: '555555555', 
+      address: '852 Cedar St', 
+      city: 'Miami', 
+      bornDate: new Date('1960-01-01'), 
+      created_at: new Date(), 
+      updated_at: new Date(), 
+      username: 'davidwilson', 
+      password: 'password404', 
+      confirmed: true, 
+      image: 'https://example.com/davidwilson.jpg', 
+      active: true 
+    }
+  ];
+
+  function isTeacher(employeeId: number): boolean {
+    return teacherRecords.some(record => record.id === employeeId);
+  }
+
+  const employee_id = Math.floor(Math.random() * 5) + 1;
+  let rating = Math.round((Math.random() * 5) * 10) / 10;
+  if (isTeacher(employee_id)) {
+    rating = Math.round((Math.random() * 2 + 6) * 10) / 10; // Asegura un rating de al menos 6.0 para los profesores
+  }
+
+  const serviceConsumptionRecords = [];
+  for (let i = 0; i < 2000; i++) {
+    const weather = Math.random() < 0.33 ? Weather.Snowy : (Math.random() < 0.5 ? Weather.Sunny : Weather.Cloudy);
+    const delay = weather === Weather.Snowy ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20);
+    const record = {
+      service_id: Math.floor(Math.random() * 5) + 1,
+      employee_id: Math.floor(Math.random() * 5) + 1,
+      client_id: Math.floor(Math.random() * 2) + 1,
+      rating: Math.round((Math.random() * 5) * 10) / 10,
+      price: Math.round((Math.random() * 500) * 10) / 10,
+      delay: delay,
+      created_at: new Date(2022, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+      reserved_at: new Date(),
+      state: Math.random() < 0.33 ? 'confirmed' : (Math.random() < 0.5 ? 'cancelled' : 'pending'),
+      weather: weather,
+    };
+    serviceConsumptionRecords.push(record);
+  }
+
   
   await db.insert(Clients).values([
     { 
@@ -38,88 +161,7 @@ export default async function seed() {
   ]);
 
 
-  await db.insert(Teachers).values([
-    { 
-      name: 'John Smith', 
-      surname: 'Smith', 
-      email: 'johnsmith@example.com', 
-      phone_number: '111111111', 
-      address: '789 Oak St', 
-      city: 'Chicago', 
-      bornDate: new Date('1980-01-01'), 
-      created_at: new Date(), 
-      updated_at: new Date(), 
-      username: 'johnsmith', 
-      password: 'password789', 
-      confirmed: true, 
-      image: 'https://example.com/johnsmith.jpg', 
-      active: true 
-    },
-    { 
-      name: 'Emily Johnson', 
-      surname: 'Johnson', 
-      email: 'emilyjohnson@example.com', 
-      phone_number: '222222222', 
-      address: '321 Pine St', 
-      city: 'San Francisco', 
-      bornDate: new Date('1975-01-01'), 
-      created_at: new Date(), 
-      updated_at: new Date(), 
-      username: 'emilyjohnson', 
-      password: 'password101', 
-      confirmed: true, 
-      image: 'https://example.com/emilyjohnson.jpg', 
-      active: true 
-    },
-    { 
-      name: 'Michael Brown', 
-      surname: 'Brown', 
-      email: 'michaelbrown@example.com', 
-      phone_number: '333333333', 
-      address: '987 Maple St', 
-      city: 'Seattle', 
-      bornDate: new Date('1970-01-01'), 
-      created_at: new Date(), 
-      updated_at: new Date(), 
-      username: 'michaelbrown', 
-      password: 'password202', 
-      confirmed: true, 
-      image: 'https://example.com/michaelbrown.jpg', 
-      active: true 
-    },
-    { 
-      name: 'Sarah Davis', 
-      surname: 'Davis', 
-      email: 'sarahdavis@example.com', 
-      phone_number: '444444444', 
-      address: '654 Walnut St', 
-      city: 'Boston', 
-      bornDate: new Date('1965-01-01'), 
-      created_at: new Date(), 
-      updated_at: new Date(), 
-      username: 'sarahdavis', 
-      password: 'password303', 
-      confirmed: true, 
-      image: 'https://example.com/sarahdavis.jpg', 
-      active: true 
-    },
-    { 
-      name: 'David Wilson', 
-      surname: 'Wilson', 
-      email: 'davidwilson@example.com', 
-      phone_number: '555555555', 
-      address: '852 Cedar St', 
-      city: 'Miami', 
-      bornDate: new Date('1960-01-01'), 
-      created_at: new Date(), 
-      updated_at: new Date(), 
-      username: 'davidwilson', 
-      password: 'password404', 
-      confirmed: true, 
-      image: 'https://example.com/davidwilson.jpg', 
-      active: true 
-    }
-  ]);
+  await db.insert(Teachers).values(teacherRecords);
   
 
   await db.insert(Services).values([
@@ -539,68 +581,73 @@ export default async function seed() {
     },
   ]);
 
-  let today = new Date();
-  today.setHours(22, 0, 0, 0); // 20 es para las 8 de la tarde
-  today.setDate(today.getDate()+1);
 
-  await db.insert(ServiceConsumption).values([
-    {
-      service_id: 1,
-      employee_id: 1,
-      client_id: 1,
-      rating: 4.5,
-      price: 100.0,
-      delay: 0,
-      created_at: new Date(2022, 1, 1),
-      reserved_at: today,
-      state: 'confirmed',
-    },
-    {
-      service_id: 2,
-      employee_id: 1,
-      client_id: 1,
-      rating: 3.0,
-      price: 200.0,
-      delay: 19,
-      created_at: new Date(2022, 1, 2),
-      reserved_at: today,
-      state: 'cancelled',
-    },
-    {
-      service_id: 3,
-      employee_id: 3,
-      client_id: 1,
-      rating: 5.0,
-      price: 150.0,
-      delay: 0,
-      created_at: new Date(2022, 1, 3),
-      reserved_at: today,
-      state: 'confirmed',
-    },
-    {
-      service_id: 4,
-      employee_id: 4,
-      client_id: 1,
-      rating: 4.0,
-      price: 250.0,
-      delay: 5,
-      created_at: new Date(2022, 1, 4),
-      reserved_at: today,
-      state: 'pending',
-    },
-    {
-      service_id: 5,
-      employee_id: 5,
-      client_id: 2,
-      rating: 3.5,
-      price: 300.0,
-      delay: 0,
-      created_at: new Date(2022, 1, 5),
-      reserved_at: today,
-      state: 'confirmed',
-    },
-  ]);
 
+  // await db.insert(ServiceConsumption).values([
+  //   {
+  //     service_id: 1,
+  //     employee_id: 1,
+  //     client_id: 1,
+  //     rating: 4.5,
+  //     price: 100.0,
+  //     delay: 0,
+  //     created_at: new Date(2022, 1, 1),
+  //     reserved_at: today,
+  //     state: 'confirmed',
+  //     weather: Weather.Snowy,
+  //   },
+  //   {
+  //     service_id: 2,
+  //     employee_id: 1,
+  //     client_id: 1,
+  //     rating: 3.0,
+  //     price: 200.0,
+  //     delay: 19,
+  //     created_at: new Date(2022, 1, 2),
+  //     reserved_at: today,
+  //     state: 'cancelled',
+  //     weather: Weather.Sunny,
+  //   },
+  //   {
+  //     service_id: 3,
+  //     employee_id: 3,
+  //     client_id: 1,
+  //     rating: 5.0,
+  //     price: 150.0,
+  //     delay: 0,
+  //     created_at: new Date(2022, 1, 3),
+  //     reserved_at: today,
+  //     state: 'confirmed',
+  //     weather: Weather.Sunny,
+  //   },
+  //   {
+  //     service_id: 4,
+  //     employee_id: 4,
+  //     client_id: 1,
+  //     rating: 4.0,
+  //     price: 250.0,
+  //     delay: 5,
+  //     created_at: new Date(2022, 1, 4),
+  //     reserved_at: today,
+  //     state: 'pending',
+  //     weather: Weather.Cloudy,
+  //   },
+  //   {
+  //     service_id: 5,
+  //     employee_id: 5,
+  //     client_id: 2,
+  //     rating: 3.5,
+  //     price: 300.0,
+  //     delay: 0,
+  //     created_at: new Date(2022, 1, 5),
+  //     reserved_at: today,
+  //     state: 'confirmed',
+  //     weather: Weather.Sunny,
+  //   },
+  // ]);
+
+
+  await db.insert(ServiceConsumption).values(serviceConsumptionRecords);
 
   // await db.insert(ClientServerConnections).values([]);
 

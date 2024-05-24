@@ -37,6 +37,13 @@ export interface Client_type {
   [key: string]: any;
 }
 
+export enum Weather {
+  Sunny = 'Sunny',
+  Cloudy = 'Cloudy',
+  Rainy = 'Rainy',
+  Snowy = 'Snowy',
+}
+
 export interface ServiceConsumption_type {
   id:         number;
   service_id:  number;
@@ -48,4 +55,5 @@ export interface ServiceConsumption_type {
   created_at:  Date;
   updated_at?:  Date;
   reserved_at:  Date;
+  weather?:     Weather;
 }
