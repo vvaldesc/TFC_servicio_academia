@@ -13,7 +13,6 @@ const Clients = defineTable({
     created_at: column.date({ optional: true }),
     updated_at: column.date({ optional: true }),
     username: column.text({ unique: true, optional: true }),
-    password: column.text({ optional: true }),
     confirmed: column.boolean({ default: false }),
     image: column.text({ optional: true }),
     active: column.boolean({ default: false }),
@@ -38,7 +37,6 @@ const Students = defineTable({
     created_at: column.date(),
     updated_at: column.date({ optional: true }),
     username: column.text({ unique: true }),
-    password: column.text(),
     confirmed: column.boolean(),
     image: column.text(),
     active: column.boolean({ default: false }),
@@ -60,10 +58,28 @@ const Teachers = defineTable({
     created_at: column.date(),
     updated_at: column.date({ optional: true }),
     username: column.text({ unique: true }),
-    password: column.text(),
     confirmed: column.boolean(),
     image: column.text(),
     active: column.boolean({ default: false }),
+  },
+});
+
+const Disciplines = defineTable({
+  columns: {
+    name: column.text({ primaryKey: true }),
+  },
+});
+
+const Courses = defineTable({
+  columns: {
+    acronym: column.text({ primaryKey: true }),
+    name: column.text(),
+    turn: column.text(),
+    attendance_threshold: column.number(),
+    educational_level: column.text(),
+    duration: column.number(),
+    practical_hours: column.number(),
+    discipline: column.text({ references: () => Disciplines.columns.name }),
   },
 });
 
@@ -73,16 +89,6 @@ const Subjects = defineTable({
     teacher_id: column.number({ references: () => Teachers.columns.id }),
     course_id: column.text({ references: () => Courses.columns.acronym }),
     name: column.text(),
-  },
-});
-
-const Courses = defineTable({
-  columns: {
-    acronym: column.text({ primaryKey: true }),
-    attendance_threshold: column.number(),
-    educational_level: column.text(),
-    duration: column.number(),
-    practical_hours: column.number(),
   },
 });
 
@@ -103,7 +109,7 @@ const Services = defineTable({
     price: column.number(),
     duration: column.number(),
     description: column.text({ optional: true }),
-    discipline: column.text(),
+    discipline: column.text({ references: () => Disciplines.columns.name }),
     image: column.text({ optional: true }),
   },
 });
@@ -161,20 +167,8 @@ const ServiceConsumption = defineTable({
     created_at: column.date(),
     updated_at: column.date({ optional: true }),
     reserved_at: column.date(),
-    state: column.text({ default: 'pending' }),
+    state: column.text({ default: 'Pending' }),
     weather: column.text({ optional: true }),
-  },
-});
-
-const Reservations = defineTable({
-  columns: {
-    id: column.number({ primaryKey: true, autoIncrement: true }),
-    service_id: column.number({ references: () => Services.columns.id }),
-    employee_id: column.number({ references: () => Employees.columns.id }),
-    client_id: column.number({ references: () => Clients.columns.id }),
-    reservation_date: column.date(),
-    reservation_time: column.text(),
-    status: column.text({ default: 'pending' }), // 'pending', 'confirmed', 'cancelled'
   },
 });
 
@@ -230,6 +224,6 @@ const ClientArticleInteractions = defineTable({
 // prettier-ignore
 export default defineDb({
   tables:
-   { Clients, Students, Employees, Services, Teachers, Subjects, Articles, Servers, Courses,
-    ClientTeacherTexts, ServiceConsumption, Reservations, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions}
+   { Clients, Students, Employees, Services, Teachers, Subjects, Articles, Servers, Courses, Disciplines,
+    ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions}
 });

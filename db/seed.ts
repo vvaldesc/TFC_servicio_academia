@@ -1,4 +1,4 @@
-import { db, Clients, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Courses, ClientTeacherTexts, ServiceConsumption, Reservations, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
+import { db, Clients, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Disciplines, Courses, ClientTeacherTexts, ServiceConsumption, Reservations, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
 import { Weather } from '../src/consts/types';
 
 export default async function seed() {
@@ -20,10 +20,10 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'johnsmith', 
-      password: 'password789', 
       confirmed: true, 
       image: 'https://example.com/johnsmith.jpg', 
-      active: true 
+      active: true,
+      is_admin: true
     },
     { 
       id: 2,
@@ -37,7 +37,6 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'emilyjohnson', 
-      password: 'password101', 
       confirmed: true, 
       image: 'https://example.com/emilyjohnson.jpg', 
       active: true 
@@ -54,7 +53,6 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'michaelbrown', 
-      password: 'password202', 
       confirmed: true, 
       image: 'https://example.com/michaelbrown.jpg', 
       active: true 
@@ -71,58 +69,42 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'sarahdavis', 
-      password: 'password303', 
       confirmed: true, 
       image: 'https://example.com/sarahdavis.jpg', 
       active: true 
     },
-    { 
-      id: 5,
-      name: 'David Wilson', 
-      surname: 'Wilson', 
-      email: 'davidwilson@example.com', 
-      phone_number: '555555555', 
-      address: '852 Cedar St', 
-      city: 'Miami', 
-      bornDate: new Date('1960-01-01'), 
-      created_at: new Date(), 
-      updated_at: new Date(), 
-      username: 'davidwilson', 
-      password: 'password404', 
-      confirmed: true, 
-      image: 'https://example.com/davidwilson.jpg', 
-      active: true 
-    }
   ];
 
   function isTeacher(employeeId: number): boolean {
     return teacherRecords.some(record => record.id === employeeId);
   }
 
-  const employee_id = Math.floor(Math.random() * 5) + 1;
-  let rating = Math.round((Math.random() * 5) * 10) / 10;
-  if (isTeacher(employee_id)) {
-    rating = Math.round((Math.random() * 2 + 6) * 10) / 10; // Asegura un rating de al menos 6.0 para los profesores
-  }
-
   const serviceConsumptionRecords = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 2; i++) {
     const weather = Math.random() < 0.33 ? Weather.Snowy : (Math.random() < 0.5 ? Weather.Sunny : Weather.Cloudy);
     const delay = weather === Weather.Snowy ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20);
+    
+    const employee_id = Math.floor(Math.random() * 20) + 1;
+    let rating = Math.round((Math.random() * 5) * 10) / 10;
+    if (isTeacher(employee_id)) {
+      rating = Math.round((Math.random() * 2 + 6) * 10) / 10; // Asegura un rating de al menos 6.0 para los profesores
+    }
+  
     const record = {
-      service_id: Math.floor(Math.random() * 5) + 1,
-      employee_id: Math.floor(Math.random() * 5) + 1,
-      client_id: Math.floor(Math.random() * 2) + 1,
-      rating: Math.round((Math.random() * 5) * 10) / 10,
+      service_id: Math.floor(Math.random() * 8) + 1, // Hay 8 servicios
+      employee_id: employee_id, // Hay 4 profesores y 20 alumnos, total 24
+      client_id: Math.floor(Math.random() * 2) + 1, // Hay 2 clientes      rating: rating,
       price: Math.round((Math.random() * 500) * 10) / 10,
       delay: delay,
       created_at: new Date(2022, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
       reserved_at: new Date(),
-      state: Math.random() < 0.33 ? 'confirmed' : (Math.random() < 0.5 ? 'cancelled' : 'pending'),
+      state: Math.random() < 0.5 ? 'Completed' : 'Cancelled',
       weather: weather,
     };
     serviceConsumptionRecords.push(record);
   }
+
+  console.log({'serviceConsumptionRecords':serviceConsumptionRecords});
 
   
   await db.insert(Clients).values([
@@ -137,7 +119,6 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'johndoe', 
-      password: 'password123', 
       confirmed: true, 
       image: 'https://example.com/johndoe.jpg', 
       active: false 
@@ -153,60 +134,93 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'janesmith', 
-      password: 'password456', 
       confirmed: true, 
       image: 'https://example.com/janesmith.jpg', 
       active: true 
     }
   ]);
-
+  console.log('Clients inserted');
 
   await db.insert(Teachers).values(teacherRecords);
-  
+  console.log('Teachers inserted');
+
+  await db.insert(Disciplines).values([
+    {
+      name: 'Estética'
+    },
+    {
+      name: 'Peluquería'
+    }
+  ]);
+  console.log('Discipline inserted');
 
   await db.insert(Services).values([
     {
-      name: 'Yoga Class',
-      price: 20,
-      duration: 60,
-      description: 'Join our relaxing yoga class.',
-      discipline: 'Yoga',
-      image: 'https://example.com/yoga.jpg',
+        name: 'Tratamiento Facial',
+        price: 50,
+        duration: 75,
+        description: 'Revitaliza tu piel con nuestro tratamiento facial.',
+        discipline: 'Estética',
+        image: 'https://example.com/facial.jpg',
     },
     {
-      name: 'Pilates Class',
-      price: 25,
-      duration: 60,
-      description: 'Improve your flexibility with pilates.',
-      discipline: 'Pilates',
-      image: 'https://example.com/pilates.jpg',
+        name: 'Manicura',
+        price: 25,
+        duration: 45,
+        description: 'Obtén una manicura profesional.',
+        discipline: 'Estética',
+        image: 'https://example.com/manicure.jpg',
     },
     {
-      name: 'Zumba Class',
-      price: 15,
-      duration: 45,
-      description: 'Dance your way to fitness with zumba.',
-      discipline: 'Zumba',
-      image: 'https://example.com/zumba.jpg',
+        name: 'Pedicura',
+        price: 30,
+        duration: 60,
+        description: 'Consiente tus pies con nuestro servicio de pedicura.',
+        discipline: 'Estética',
+        image: 'https://example.com/pedicure.jpg',
     },
     {
-      name: 'Boxing Class',
-      price: 30,
-      duration: 60,
-      description: 'Get fit and learn self-defense with boxing.',
-      discipline: 'Boxing',
-      image: 'https://example.com/boxing.jpg',
+        name: 'Exfoliación Corporal',
+        price: 40,
+        duration: 60,
+        description: 'Exfolia y renueva tu piel con una exfoliación corporal.',
+        discipline: 'Estética',
+        image: 'https://example.com/bodyscrub.jpg',
     },
     {
-      name: 'Spin Class',
-      price: 18,
-      duration: 45,
-      description: 'Burn calories and improve your cardiovascular health with spin.',
-      discipline: 'Spin',
-      image: 'https://example.com/spin.jpg',
+        name: 'Corte de Pelo',
+        price: 20,
+        duration: 30,
+        description: 'Obtén un corte de pelo con estilo de nuestros estilistas profesionales.',
+        discipline: 'Peluquería',
+        image: 'https://example.com/haircut.jpg',
+    },
+    {
+        name: 'Coloración de Pelo',
+        price: 60,
+        duration: 120,
+        description: 'Añade color a tu cabello con nuestro servicio de coloración.',
+        discipline: 'Peluquería',
+        image: 'https://example.com/haircoloring.jpg',
+    },
+    {
+        name: 'Peinado',
+        price: 40,
+        duration: 45,
+        description: 'Consigue el peinado perfecto para cualquier ocasión.',
+        discipline: 'Peluquería',
+        image: 'https://example.com/hairstyling.jpg',
+    },
+    {
+        name: 'Tratamiento de Keratina',
+        price: 80,
+        duration: 90,
+        description: 'Alisa y fortalece tu cabello con un tratamiento de keratina.',
+        discipline: 'Peluquería',
+        image: 'https://example.com/keratin.jpg',
     },
   ]);
-  
+  console.log('Services inserted');
 
   await db.insert(Articles).values([
     {
@@ -300,54 +314,52 @@ export default async function seed() {
       image4: 'https://example.com/protein-scoop.jpg',
     },
   ]);
-
+  console.log('Articles inserted');
 
   await db.insert(Students).values([
     {
       matriculation_number: '001',
-      DNI: '123456789A',
+      DNI: '12345678A',
       employed: false,
-      educational_level: 'High School',
-      name: 'John',
-      surname: 'Doe',
-      email: 'johndoe@example.com',
+      educational_level: 'ESO',
+      name: 'Juan',
+      surname: 'Pérez',
+      email: 'juanperez@example.com',
       phone_number: '123456789',
-      address: '123 Main St',
-      city: 'New York',
+      address: 'Calle Mayor 1',
+      city: 'Madrid',
       bornDate: new Date('1990-01-01'),
       created_at: new Date(),
       updated_at: new Date(),
-      username: 'johndoe',
-      password: 'password123',
+      username: 'juanperez',
       confirmed: true,
-      image: 'https://example.com/johndoe.jpg',
+      image: 'https://example.com/juanperez.jpg',
       active: true
     },
     {
       matriculation_number: '002',
-      DNI: '987654321B',
+      DNI: '23456789B',
       employed: true,
-      educational_level: 'University',
-      name: 'Jane',
-      surname: 'Smith',
-      email: 'janesmith@example.com',
-      phone_number: '987654321',
-      address: '456 Elm St',
-      city: 'Los Angeles',
-      bornDate: new Date('1985-01-01'),
+      educational_level: 'Grado medio',
+      name: 'María',
+      surname: 'Gómez',
+      email: 'mariagomez@example.com',
+      phone_number: '234567890',
+      address: 'Calle Menor 2',
+      city: 'Barcelona',
+      bornDate: new Date('1989-02-02'),
       created_at: new Date(),
       updated_at: new Date(),
-      username: 'janesmith',
-      password: 'password456',
+      username: 'mariagomez',
       confirmed: true,
-      image: 'https://example.com/janesmith.jpg',
+      image: 'https://example.com/mariagomez.jpg',
       active: true
     },
     {
       matriculation_number: '003',
       DNI: '111111111C',
       employed: false,
-      educational_level: 'High School',
+      educational_level: 'ESO',
       name: 'Michael',
       surname: 'Brown',
       email: 'michaelbrown@example.com',
@@ -358,175 +370,486 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'michaelbrown',
-      password: 'password202',
       confirmed: true,
       image: 'https://example.com/michaelbrown.jpg',
       active: true
     },
     {
       matriculation_number: '004',
-      DNI: '222222222D',
+      DNI: '34567890C',
       employed: true,
-      educational_level: 'University',
-      name: 'Sarah',
-      surname: 'Davis',
-      email: 'sarahdavis@example.com',
-      phone_number: '444444444',
-      address: '654 Walnut St',
-      city: 'Boston',
-      bornDate: new Date('1965-01-01'),
+      educational_level: 'Bachillerato',
+      name: 'Carlos',
+      surname: 'Martínez',
+      email: 'carlosmartinez@example.com',
+      phone_number: '345678901',
+      address: 'Calle Central 3',
+      city: 'Valencia',
+      bornDate: new Date('1988-03-03'),
       created_at: new Date(),
       updated_at: new Date(),
-      username: 'sarahdavis',
-      password: 'password303',
+      username: 'carlosmartinez',
       confirmed: true,
-      image: 'https://example.com/sarahdavis.jpg',
+      image: 'https://example.com/carlosmartinez.jpg',
       active: true
     },
     {
       matriculation_number: '005',
-      DNI: '333333333E',
+      DNI: '45678901D',
       employed: false,
-      educational_level: 'High School',
-      name: 'David',
-      surname: 'Wilson',
-      email: 'davidwilson@example.com',
-      phone_number: '555555555',
-      address: '852 Cedar St',
-      city: 'Miami',
-      bornDate: new Date('1960-01-01'),
+      educational_level: 'Universidad',
+      name: 'Ana',
+      surname: 'Fernández',
+      email: 'anafernandez@example.com',
+      phone_number: '456789012',
+      address: 'Calle Lateral 4',
+      city: 'Sevilla',
+      bornDate: new Date('1987-04-04'),
       created_at: new Date(),
       updated_at: new Date(),
-      username: 'davidwilson',
-      password: 'password404',
+      username: 'anafernandez5',
       confirmed: true,
-      image: 'https://example.com/davidwilson.jpg',
+      image: 'https://example.com/anafernandez.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '006',
+      DNI: '56789012E',
+      employed: true,
+      educational_level: 'Grado superior',
+      name: 'Pedro',
+      surname: 'García',
+      email: 'pedrogarcia@example.com',
+      phone_number: '567890123',
+      address: 'Calle Principal 5',
+      city: 'Bilbao',
+      bornDate: new Date('1986-05-05'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'pedrogarcia83',
+      confirmed: true,
+      image: 'https://example.com/pedrogarcia.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '007',
+      DNI: '67890123F',
+      employed: false,
+      educational_level: 'Universidad',
+      name: 'Laura',
+      surname: 'López',
+      email: 'lauralopez@example.com',
+      phone_number: '678901234',
+      address: 'Calle Secundaria 6',
+      city: 'Zaragoza',
+      bornDate: new Date('1985-06-06'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'lauralopez1',
+      confirmed: true,
+      image: 'https://example.com/lauralopez.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '008',
+      DNI: '78901234G',
+      employed: true,
+      educational_level: 'Bachillerato',
+      name: 'Javier',
+      surname: 'Rodríguez',
+      email: 'javierrodriguez@example.com',
+      phone_number: '789012345',
+      address: 'Calle Terciaria 7',
+      city: 'Málaga',
+      bornDate: new Date('1984-07-07'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'javierrodriguez2',
+      confirmed: true,
+      image: 'https://example.com/javierrodriguez.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '009',
+      DNI: '89012345H',
+      employed: false,
+      educational_level: 'Universidad',
+      name: 'Carmen',
+      surname: 'Sánchez',
+      email: 'carmensanchez@example.com',
+      phone_number: '890123456',
+      address: 'Calle Cuarta 8',
+      city: 'Granada',
+      bornDate: new Date('1983-08-08'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'carmensanchez13',
+      confirmed: true,
+      image: 'https://example.com/carmensanchez.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '010',
+      DNI: '90123456I',
+      employed: true,
+      educational_level: 'Grado medio',
+      name: 'Fernando',
+      surname: 'Torres',
+      email: 'fernandotorres@example.com',
+      phone_number: '901234567',
+      address: 'Calle Quinta 9',
+      city: 'Córdoba',
+      bornDate: new Date('1982-09-09'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'fernandotorres35',
+      confirmed: true,
+      image: 'https://example.com/fernandotorres.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '011',
+      DNI: '91234567J',
+      employed: true,
+      educational_level: 'Grado superior',
+      name: 'Luis',
+      surname: 'Morales',
+      email: 'luismorales@example.com',
+      phone_number: '912345678',
+      address: 'Calle Sexta 10',
+      city: 'Alicante',
+      bornDate: new Date('1981-10-10'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'luismorales',
+      confirmed: true,
+      image: 'https://example.com/luismorales.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '012',
+      DNI: '02345678K',
+      employed: false,
+      educational_level: 'Universidad',
+      name: 'Sara',
+      surname: 'Ramírez',
+      email: 'sararamirez@example.com',
+      phone_number: '023456789',
+      address: 'Calle Séptima 11',
+      city: 'Murcia',
+      bornDate: new Date('1980-11-11'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'sararamirez',
+      confirmed: true,
+      image: 'https://example.com/sararamirez.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '013',
+      DNI: '13456789L',
+      employed: true,
+      educational_level: 'Bachillerato',
+      name: 'Roberto',
+      surname: 'Ortega',
+      email: 'robertoortega@example.com',
+      phone_number: '134567890',
+      address: 'Calle Octava 12',
+      city: 'Salamanca',
+      bornDate: new Date('1979-12-12'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'robertoortega',
+      confirmed: true,
+      image: 'https://example.com/robertoortega.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '014',
+      DNI: '24567890M',
+      employed: false,
+      educational_level: 'Grado medio',
+      name: 'Patricia',
+      surname: 'Castillo',
+      email: 'patriciacastillo@example.com',
+      phone_number: '245678901',
+      address: 'Calle Novena 13',
+      city: 'Valladolid',
+      bornDate: new Date('1978-01-13'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'patriciacastillo',
+      confirmed: true,
+      image: 'https://example.com/patriciacastillo.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '015',
+      DNI: '35678901N',
+      employed: true,
+      educational_level: 'Universidad',
+      name: 'Ricardo',
+      surname: 'Guerrero',
+      email: 'ricardoguerrero@example.com',
+      phone_number: '356789012',
+      address: 'Calle Décima 14',
+      city: 'Toledo',
+      bornDate: new Date('1977-02-14'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'ricardoguerrero',
+      confirmed: true,
+      image: 'https://example.com/ricardoguerrero.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '016',
+      DNI: '46789012O',
+      employed: false,
+      educational_level: 'Grado superior',
+      name: 'Marta',
+      surname: 'Peña',
+      email: 'martapena@example.com',
+      phone_number: '467890123',
+      address: 'Calle Undécima 15',
+      city: 'Pamplona',
+      bornDate: new Date('1976-03-15'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'martapena',
+      confirmed: true,
+      image: 'https://example.com/martapena.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '017',
+      DNI: '57890123P',
+      employed: true,
+      educational_level: 'Universidad',
+      name: 'Antonio',
+      surname: 'Navarro',
+      email: 'antonionavarro@example.com',
+      phone_number: '578901234',
+      address: 'Calle Duodécima 16',
+      city: 'Santander',
+      bornDate: new Date('1975-04-16'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'antonionavarro',
+      confirmed: true,
+      image: 'https://example.com/antonionavarro.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '018',
+      DNI: '68901234Q',
+      employed: false,
+      educational_level: 'Bachillerato',
+      name: 'Isabel',
+      surname: 'Molina',
+      email: 'isabelmolina@example.com',
+      phone_number: '689012345',
+      address: 'Calle Decimotercera 17',
+      city: 'Oviedo',
+      bornDate: new Date('1974-05-17'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'isabelmolina',
+      confirmed: true,
+      image: 'https://example.com/isabelmolina.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '019',
+      DNI: '79012345R',
+      employed: true,
+      educational_level: 'Universidad',
+      name: 'Alberto',
+      surname: 'Herrera',
+      email: 'albertoherrera@example.com',
+      phone_number: '790123456',
+      address: 'Calle Decimocuarta 18',
+      city: 'Gijón',
+      bornDate: new Date('1973-06-18'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'albertoherrera',
+      confirmed: true,
+      image: 'https://example.com/albertoherrera.jpg',
+      active: true
+    },
+    {
+      matriculation_number: '020',
+      DNI: '80123456S',
+      employed: false,
+      educational_level: 'Grado medio',
+      name: 'Cristina',
+      surname: 'Delgado',
+      email: 'cristinadelgado@example.com',
+      phone_number: '801234567',
+      address: 'Calle Decimoquinta 19',
+      city: 'Burgos',
+      bornDate: new Date('1972-07-19'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'cristinadelgado',
+      confirmed: true,
+      image: 'https://example.com/cristinadelgado.jpg',
       active: true
     }
   ]);
-
+  console.log('Students inserted');
 
   await db.insert(Courses).values([
     {
-      acronym: 'CS101',
+      acronym: 'FP_MP1',
+      name: 'Grado medio peluquería 1',
+      turn: 'Diurno',
       attendance_threshold: 80,
       educational_level: 'Beginner',
       duration: 60,
       practical_hours: 20,
+      discipline: 'Peluquería',
     },
     {
-      acronym: 'MATH202',
-      attendance_threshold: 75,
-      educational_level: 'Intermediate',
-      duration: 90,
-      practical_hours: 30,
-    },
-    {
-      acronym: 'PHYS303',
-      attendance_threshold: 85,
-      educational_level: 'Advanced',
-      duration: 120,
-      practical_hours: 40,
-    },
-    {
-      acronym: 'CHEM404',
-      attendance_threshold: 90,
-      educational_level: 'Advanced',
-      duration: 120,
-      practical_hours: 40,
-    },
-    {
-      acronym: 'BIO505',
+      acronym: 'FP_MP2',
+      name: 'Grado medio peluquería 2',
+      turn: 'Nocturno',
       attendance_threshold: 80,
       educational_level: 'Intermediate',
       duration: 90,
       practical_hours: 30,
+      discipline: 'Peluquería',
+    },
+    {
+      acronym: 'FP_BE2',
+      name: 'Grado basico estética 2',
+      turn: 'Nocturno',
+      attendance_threshold: 80,
+      educational_level: 'Advanced',
+      duration: 120,
+      practical_hours: 40,
+      discipline: 'Estética',
+    },
+    {
+      acronym: 'FP_BE1',
+      name: 'Grado basico estética 1',
+      turn: 'Diurno',
+      attendance_threshold: 80,
+      educational_level: 'Intermediate',
+      duration: 120,
+      practical_hours: 40,
+      discipline: 'Estética',
     },
   ]);
-
+  console.log('Courses inserted');
 
   await db.insert(Subjects).values([
+    // Asignaturas para el curso de Peluquería
     {
-      acronym: 'ENG101',
+      acronym: 'CPP',
       teacher_id: 1,
-      course_id: 'CS101',
-      name: 'English 101',
+      course_id: 'FP_MP1',
+      name: 'Corte de cabello y peinados',
     },
     {
-      acronym: 'MATH201',
+      acronym: 'COC',
       teacher_id: 2,
-      course_id: 'MATH202',
-      name: 'Mathematics 201',
+      course_id: 'FP_MP1',
+      name: 'Coloración del cabello',
     },
     {
-      acronym: 'PHYS301',
+      acronym: 'TCP',
       teacher_id: 3,
-      course_id: 'PHYS303',
-      name: 'Physics 301',
+      course_id: 'FP_MP1',
+      name: 'Tratamientos capilares',
+    },
+    // Asignaturas para el curso de Estética 1
+    {
+      acronym: 'CPL',
+      teacher_id: 1,
+      course_id: 'FP_BE1',
+      name: 'Cuidado de la piel',
     },
     {
-      acronym: 'CHEM401',
+      acronym: 'MPR',
+      teacher_id: 3,
+      course_id: 'FP_BE1',
+      name: 'Maquillaje profesional',
+    },
+    {
+      acronym: 'MYP',
+      teacher_id: 2,
+      course_id: 'FP_BE1',
+      name: 'Manicura y pedicura',
+    },
+    // Asignaturas para el curso de Peluquería 2
+    {
+      acronym: 'CBB',
       teacher_id: 4,
-      course_id: 'CHEM404',
-      name: 'Chemistry 401',
+      course_id: 'FP_MP2',
+      name: 'Corte de barba y bigote',
     },
     {
-      acronym: 'BIO501',
-      teacher_id: 5,
-      course_id: 'BIO505',
-      name: 'Biology 501',
+      acronym: 'ECB',
+      teacher_id: 4,
+      course_id: 'FP_MP2',
+      name: 'Estilismo en el cabello',
+    },
+    {
+      acronym: 'BAR',
+      teacher_id: 4,
+      course_id: 'FP_MP2',
+      name: 'Cuidado de la barba',
+    },
+    // Asignaturas para el curso de Estética 2
+    {
+      acronym: 'ICO',
+      teacher_id: 1,
+      course_id: 'FP_BE2',
+      name: 'Introducción a la cosmetología',
+    },
+    {
+      acronym: 'PCO',
+      teacher_id: 2,
+      course_id: 'FP_BE2',
+      name: 'Uñas de gel y acrílicas',
+    },
+    {
+      acronym: 'TAC',
+      teacher_id: 1,
+      course_id: 'FP_BE2',
+      name: 'Técnicas de aplicación de cosméticos',
     },
   ]);
+  console.log('Subjects inserted');
 
-
-  await db.insert(Employees).values([
-    {
-      teacher_id: 1,
-      social_security: '123456789',
-      salary: 5000,
-    },
-    {
-      teacher_id: 2,
-      social_security: '987654321',
-      salary: 6000,
-    },
-    {
-      teacher_id: 3,
-      social_security: '111111111',
-      salary: 5500,
-    },
-    {
-      teacher_id: 4,
-      social_security: '222222222',
-      salary: 5200,
-    },
-    {
-      teacher_id: 5,
-      social_security: '333333333',
-      salary: 5300,
-    },
-    {
-      student_id: 1,
-      social_security: '123456784',
-    },
-    {
-      student_id: 2,
-      social_security: '987654322',
-    },
-    {
-      student_id: 3,
-      social_security: '111111112',
-    },
-    {
-      student_id: 4,
-      social_security: '222222223',
-    },
-    {
-      student_id: 5,
-      social_security: '333333334',
-    },
-  ]);
-
+  async function insertEmployees() {
+    // Prepare array for all employees
+    const employees = [];
+    // Prepare teachers
+    const teachers = [
+        { teacher_id: 1, social_security: "123456789" },
+        { teacher_id: 2, social_security: "987654321", salary: 6000 },
+        { teacher_id: 3, social_security: "111111111", salary: 5500 },
+        { teacher_id: 4, social_security: "222222222", salary: 5200 }
+    ];
+    // Add teachers to employees array
+    employees.push(...teachers);
+    // Prepare students
+    for (let i = 1; i <= 20; i++) {
+        const student = {
+            student_id: i,
+            social_security: (i + 200000000).toString(),
+        };
+        // Add each student to employees array
+        employees.push(student);
+    }
+    // Insert all employees
+    await db.insert(Employees).values(employees);
+    console.log({'Employees inserted': employees});
+  }
+  insertEmployees();
 
   await db.insert(Servers).values([
     {
@@ -536,7 +859,7 @@ export default async function seed() {
       id: 1,
     }
   ]);
-
+  console.log('Servers inserted');
 
   await db.insert(ClientTeacherTexts).values([
     {
@@ -573,15 +896,15 @@ export default async function seed() {
     },
     {
       client_id: 1,
-      teacher_id: 5,
+      teacher_id: 4,
       sent_from_client: true,
       sent_from_teacher: false,
       message: "Perfecto, nos vemos el viernes.",
       date: new Date(),
     },
   ]);
-
-
+  console.log('ClientTeacherTexts inserted');
+  
 
   // await db.insert(ServiceConsumption).values([
   //   {
@@ -648,6 +971,7 @@ export default async function seed() {
 
 
   await db.insert(ServiceConsumption).values(serviceConsumptionRecords);
+  console.log('ServiceConsumption inserted');
 
   // await db.insert(ClientServerConnections).values([]);
 
@@ -655,74 +979,110 @@ export default async function seed() {
   await db.insert(StudentSubjectEnrolments).values([
     {
       student_id: 1,
-      subject_acronym: 'ENG101',
+      subject_acronym: 'CPP',
       date: new Date(),
     },
-    {
-      student_id: 2,
-      subject_acronym: 'MATH201',
-      date: new Date(),
-    },
-    {
-      student_id: 3,
-      subject_acronym: 'PHYS301',
-      date: new Date(),
-    },
-    {
-      student_id: 4,
-      subject_acronym: 'CHEM401',
-      date: new Date(),
-    },
-    {
-      student_id: 5,
-      subject_acronym: 'BIO501',
-      date: new Date(),
-    },
-  ]);
-
-
-  await db.insert(StudentSubjectFaults).values([
     {
       student_id: 1,
-      subject_acronym: 'MATH201',
+      subject_acronym: 'COC',
       date: new Date(),
-      justified: true,
-      justification: 'Medical leave',
-      description: 'Missed class due to illness',
+    },
+    {
+      student_id: 1,
+      subject_acronym: 'TCP',
+      date: new Date(),
     },
     {
       student_id: 2,
-      subject_acronym: 'MATH201',
+      subject_acronym: 'CPL',
       date: new Date(),
-      justified: false,
-      justification: null,
-      description: 'Missed class without reason',
+    },
+    {
+      student_id: 2,
+      subject_acronym: 'MPR',
+      date: new Date(),
+    },
+    {
+      student_id: 2,
+      subject_acronym: 'MYP',
+      date: new Date(),
     },
     {
       student_id: 3,
-      subject_acronym: 'PHYS301',
+      subject_acronym: 'CBB',
       date: new Date(),
-      justified: true,
-      justification: 'Family emergency',
-      description: 'Missed class due to personal reasons',
+    },
+    {
+      student_id: 3,
+      subject_acronym: 'ECB',
+      date: new Date(),
+    },
+    {
+      student_id: 3,
+      subject_acronym: 'BAR',
+      date: new Date(),
     },
     {
       student_id: 4,
-      subject_acronym: 'CHEM401',
+      subject_acronym: 'ICO',
       date: new Date(),
-      justified: false,
-      justification: null,
-      description: 'Missed class without reason',
     },
     {
-      student_id: 5,
-      subject_acronym: 'BIO501',
+      student_id: 4,
+      subject_acronym: 'PCO',
       date: new Date(),
-      justified: true,
-      justification: 'Vacation',
-      description: 'Missed class due to travel',
+    },
+    {
+      student_id: 4,
+      subject_acronym: 'TAC',
+      date: new Date(),
     },
   ]);
+  console.log('StudentSubjectEnrolments inserted');
+
+
+  // await db.insert(StudentSubjectFaults).values([
+  //   {
+  //     student_id: 1,
+  //     subject_acronym: 'MATH201',
+  //     date: new Date(),
+  //     justified: true,
+  //     justification: 'Medical leave',
+  //     description: 'Missed class due to illness',
+  //   },
+  //   {
+  //     student_id: 2,
+  //     subject_acronym: 'MATH201',
+  //     date: new Date(),
+  //     justified: false,
+  //     justification: null,
+  //     description: 'Missed class without reason',
+  //   },
+  //   {
+  //     student_id: 3,
+  //     subject_acronym: 'PHYS301',
+  //     date: new Date(),
+  //     justified: true,
+  //     justification: 'Family emergency',
+  //     description: 'Missed class due to personal reasons',
+  //   },
+  //   {
+  //     student_id: 4,
+  //     subject_acronym: 'CHEM401',
+  //     date: new Date(),
+  //     justified: false,
+  //     justification: null,
+  //     description: 'Missed class without reason',
+  //   },
+  //   {
+  //     student_id: 5,
+  //     subject_acronym: 'BIO501',
+  //     date: new Date(),
+  //     justified: true,
+  //     justification: 'Vacation',
+  //     description: 'Missed class due to travel',
+  //   },
+  // ]);
 
 
   await db.insert(ClientArticleInteractions).values([
@@ -782,5 +1142,6 @@ export default async function seed() {
       price: 34,
     },
   ]);
+  console.log('ClientArticleInteractions inserted');
 
 };

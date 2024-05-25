@@ -1,20 +1,27 @@
 {
-  "name": "",
+  "name": "Imagen",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "all": "run-p dev cron",
+    "allre": "run-p devre cron",
     "dev": "astro dev",
     "devre": "astro dev --remote",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "cron": "node ./src/cronJobs.js"
   },
   "dependencies": {
-    "@astrojs/check": "^0.5.10",
-    "@astrojs/db": "^0.10.6",
-    "astro": "^4.6.4",
-    "nodemailer": "^6.9.13",
-    "typescript": "^5.4.5"
+    "@astrojs/check": "0.7.0",
+    "@astrojs/db": "0.11.4",
+    "astro": "4.9.1",
+    "node-cron": "3.0.3",
+    "nodemailer": "6.9.13",
+    "typescript": "5.4.5"
+  },
+  "devDependencies": {
+    "npm-run-all": "4.1.5"
   }
 }
