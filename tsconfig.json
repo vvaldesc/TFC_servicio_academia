@@ -10,6 +10,9 @@
       ],
       "@/consts/*": [
         "./src/consts/*"
+      ],
+      "@/services/*": [
+        "./src/services/*"
       ]
     },
   }

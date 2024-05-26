@@ -1,6 +1,7 @@
-import { db, ServiceConsumption, Clients, Employees, Teachers, Students, eq, desc, count } from "astro:db";
+import { db, ServiceConsumption, Clients, Employees, Teachers, Students, eq, desc, count, lt, and, not } from "astro:db";
 import type { APIRoute } from "astro";
 import type { Result, ServiceConsumption_type } from "@/consts/types";
+import { DateTime } from 'luxon';
 
 export const GET = async () => {
   const serviceConsumptions = await db.select({
@@ -32,6 +33,7 @@ export const GET = async () => {
     teacher_email: Teachers.email,
     student_email: Students.email,
     employee_salary: Employees.salary,
+    state: ServiceConsumption.state,
   })
   .from(ServiceConsumption)
   .leftJoin(Clients, eq(ServiceConsumption.client_id, Clients.id))
@@ -69,9 +71,9 @@ export const POST: APIRoute = async (request) => {
   try {
     const serviceConsumptions: ServiceConsumption_type = await request.request.json();
     //@ts-ignore
-    serviceConsumptions.created_at = new Date();
+    serviceConsumptions.created_at = DateTime.local();
     //@ts-ignore
-    serviceConsumptions.updated_at = new Date();
+    serviceConsumptions.updated_at = DateTime.local();
     //@ts-ignore
     serviceConsumptions.reserved_at = new Date(serviceConsumptions.reserved_at); // Corregido aquí
     console.log('serviceConsumptions');
@@ -89,6 +91,61 @@ export const POST: APIRoute = async (request) => {
       result.data = response;
       result.table= "ServiceConsumption";
       result.count = 1;
+    }
+
+    return new Response(JSON.stringify({ result }), {
+      status: status,
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  } catch (error) {
+    //@ts-ignore
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  }
+};
+
+export const PUT: APIRoute = async (request) => {
+  let result: Result = {
+    data: "undefined" as string | ServiceConsumption_type,
+    table: "ServiceConsumption" as string,
+    count: 0,
+  };
+  let status: number = 404;
+  try {
+    const updateParams: any = await request.request.json();
+    console.log(request);
+    console.log('updateParams');
+    console.log(updateParams);
+
+    let dateISO = new Date();
+    dateISO.setHours(dateISO.getHours() + 2);
+    
+    let datesISO_check = new Date(dateISO.getTime());
+    datesISO_check.setMinutes(datesISO_check.getMinutes() - 30);
+    
+    console.log({'dateISO':dateISO});
+    console.log({'datesISO_check':datesISO_check});
+
+    const response = updateParams.cronUpdate && await db.update(ServiceConsumption)
+    .set({state: 'Completed',updated_at: dateISO as Date})
+    .where(
+      and(
+        lt(ServiceConsumption.reserved_at, datesISO_check as Date),
+        not(eq(ServiceConsumption.state, 'Completed'))
+      )
+    );
+
+    if (response) {
+      status = 200;
+      result.data = response;
+      result.table= "ServiceConsumption";
+      result.count = 0;
     }
 
     return new Response(JSON.stringify({ result }), {

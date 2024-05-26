@@ -80,9 +80,13 @@ export default async function seed() {
   }
 
   const serviceConsumptionRecords = [];
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 200; i++) {
     const weather = Math.random() < 0.33 ? Weather.Snowy : (Math.random() < 0.5 ? Weather.Sunny : Weather.Cloudy);
     const delay = weather === Weather.Snowy ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20);
+
+    let reserved_at = new Date();
+    reserved_at.setMinutes(Math.random() < 0.5 ? 30 : 0);
+    reserved_at.setSeconds(0);
     
     const employee_id = Math.floor(Math.random() * 20) + 1;
     let rating = Math.round((Math.random() * 5) * 10) / 10;
@@ -97,8 +101,8 @@ export default async function seed() {
       price: Math.round((Math.random() * 500) * 10) / 10,
       delay: delay,
       created_at: new Date(2022, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
-      reserved_at: new Date(),
-      state: Math.random() < 0.5 ? 'Completed' : 'Cancelled',
+      reserved_at: reserved_at,
+      state: Math.random() < 0.5 ? 'Pending' : 'Cancelled',
       weather: weather,
     };
     serviceConsumptionRecords.push(record);
