@@ -1,8 +1,11 @@
-import { db, eq, Employees, Teachers, Students, ServiceConsumption, count, avg } from "astro:db";
+import { sql, and ,db, eq, Employees, Teachers, Students, ServiceConsumption, avg, Courses, Subjects, StudentSubjectEnrolments, count, exists, countDistinct, alias, or, not } from "astro:db";
 import type { APIRoute } from "astro";
-import type { Result } from "@/consts/types";
+import type { Result, Client_type } from "@/consts/types";
 
 export const GET = async () => {
+  const Subjects2 = alias(Subjects, "Subjects2")
+  const Courses2 = alias(Courses, "Courses2")
+
   const employees
   = 
   await db.select({
@@ -25,10 +28,11 @@ export const GET = async () => {
       created_at: Teachers.created_at,
       updated_at: Teachers.updated_at,
       username: Teachers.username,
-      password: Teachers.password,
       confirmed: Teachers.confirmed,
       image: Teachers.image,
-      active: Teachers.active
+      active: Teachers.active,
+      disciplines: sql`GROUP_CONCAT(DISTINCT ${Courses.discipline})`,
+      turns: sql`GROUP_CONCAT(DISTINCT ${Courses.turn})`,
     },
     student: {
       id: Students.id,
@@ -46,20 +50,25 @@ export const GET = async () => {
       created_at: Students.created_at,
       updated_at: Students.updated_at,
       username: Students.username,
-      password: Students.password,
       confirmed: Students.confirmed,
       image: Students.image,
-      active: Students.active
+      active: Students.active,
+      disciplines: sql`GROUP_CONCAT(DISTINCT ${Courses2.discipline})`,
+      turns: sql`GROUP_CONCAT(DISTINCT ${Courses2.turn})`,
+      count: countDistinct(Subjects2.acronym),
     }
   })
   .from(Employees)
   .leftJoin(ServiceConsumption, eq(Employees.id, ServiceConsumption.employee_id))
   .leftJoin(Teachers, eq(Employees.teacher_id, Teachers.id))
+  .leftJoin(Subjects, eq(Teachers.id, Subjects.teacher_id))
+  .leftJoin(Courses, eq(Subjects.course_id, Courses.acronym))
   .leftJoin(Students, eq(Employees.student_id, Students.id))
+  .leftJoin(StudentSubjectEnrolments, eq(Students.id, StudentSubjectEnrolments.student_id))
+  .leftJoin(Subjects2, eq(Subjects2.acronym, StudentSubjectEnrolments.subject_acronym))
+  .leftJoin(Courses2, eq(Subjects2.course_id, Courses2.acronym))
   .groupBy(Employees.id)
-  .orderBy(Employees.id);
-
-  console.log(employees);
+  .orderBy(Employees.id)
 
   const combinedEmployees = employees.map(employee => {
     let role = employee.teacher_id ? "teacher" : (employee.student_id ? "student" : null);
@@ -67,14 +76,20 @@ export const GET = async () => {
       ...employee,
       role: role,
       rating: employee.rating,
-      teacher: {
-        ...employee.teacher,
-      },
-      student: {
-        ...employee.student,
-      }
+    teacher: employee.teacher ? {
+      ...employee.teacher,
+      disciplines: typeof employee.teacher.disciplines === 'string' ? employee.teacher.disciplines.split(",") : [],
+      turns: typeof employee.teacher.turns === 'string' ? employee.teacher.turns.split(",") : [],
+    } : null,
+    student: employee.student ? {
+      ...employee.student,
+      disciplines: typeof employee.student.disciplines === 'string' ? employee.student.disciplines.split(",") : [],
+      turns: typeof employee.student.turns === 'string' ? employee.student.turns.split(",") : [],
+    } : null,
     };
   });
+
+  combinedEmployees
 
   let status: number = 404;
   let result: Result = {

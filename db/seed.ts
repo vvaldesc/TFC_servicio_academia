@@ -320,7 +320,7 @@ export default async function seed() {
   ]);
   console.log('Articles inserted');
 
-  await db.insert(Students).values([
+  const students = [
     {
       matriculation_number: '001',
       DNI: '12345678A',
@@ -701,7 +701,8 @@ export default async function seed() {
       image: 'https://example.com/cristinadelgado.jpg',
       active: true
     }
-  ]);
+  ]
+  await db.insert(Students).values(students);
   console.log('Students inserted');
 
   await db.insert(Courses).values([
@@ -979,69 +980,20 @@ export default async function seed() {
 
   // await db.insert(ClientServerConnections).values([]);
 
-
-  await db.insert(StudentSubjectEnrolments).values([
-    {
-      student_id: 1,
-      subject_acronym: 'CPP',
-      date: new Date(),
-    },
-    {
-      student_id: 1,
-      subject_acronym: 'COC',
-      date: new Date(),
-    },
-    {
-      student_id: 1,
-      subject_acronym: 'TCP',
-      date: new Date(),
-    },
-    {
-      student_id: 2,
-      subject_acronym: 'CPL',
-      date: new Date(),
-    },
-    {
-      student_id: 2,
-      subject_acronym: 'MPR',
-      date: new Date(),
-    },
-    {
-      student_id: 2,
-      subject_acronym: 'MYP',
-      date: new Date(),
-    },
-    {
-      student_id: 3,
-      subject_acronym: 'CBB',
-      date: new Date(),
-    },
-    {
-      student_id: 3,
-      subject_acronym: 'ECB',
-      date: new Date(),
-    },
-    {
-      student_id: 3,
-      subject_acronym: 'BAR',
-      date: new Date(),
-    },
-    {
-      student_id: 4,
-      subject_acronym: 'ICO',
-      date: new Date(),
-    },
-    {
-      student_id: 4,
-      subject_acronym: 'PCO',
-      date: new Date(),
-    },
-    {
-      student_id: 4,
-      subject_acronym: 'TAC',
-      date: new Date(),
-    },
-  ]);
+  const subjects = ['CPP', 'COC', 'TCP', 'CPL', 'MPR', 'MYP', 'CBB', 'ECB', 'BAR', 'ICO', 'PCO', 'TAC'];
+  const enrolments = [];
+  
+  for (let i = 1; i <= students.length; i++) {
+    for (let j = 0; j < 3; j++) {
+      enrolments.push({
+        student_id: i,
+        subject_acronym: subjects[(i + j - 1) % subjects.length],
+        date: new Date(),
+      });
+    }
+  }
+  
+  await db.insert(StudentSubjectEnrolments).values(enrolments);
   console.log('StudentSubjectEnrolments inserted');
 
 
