@@ -1,4 +1,4 @@
-import { db, ServiceConsumption, Clients, Employees, Teachers, Students, eq, desc, count, lt, and, not } from "astro:db";
+import { db, ServiceConsumption, Clients, Employees, Teachers, Students, eq, desc, lt, and, not } from "astro:db";
 import type { APIRoute } from "astro";
 import type { Result, ServiceConsumption_type } from "@/consts/types";
 import { DateTime } from 'luxon';
@@ -70,12 +70,18 @@ export const POST: APIRoute = async (request) => {
   let status: number = 404;
   try {
     const serviceConsumptions: ServiceConsumption_type = await request.request.json();
+
+    const dateActual = new Date();
+    dateActual.setHours(dateActual.getHours() + 2);
+    console.log({'dateActual':dateActual});
+
     //@ts-ignore
-    serviceConsumptions.created_at = DateTime.local();
+    serviceConsumptions.created_at = dateActual;
     //@ts-ignore
-    serviceConsumptions.updated_at = DateTime.local();
+    serviceConsumptions.updated_at = dateActual;
     //@ts-ignore
     serviceConsumptions.reserved_at = new Date(serviceConsumptions.reserved_at); // Corregido aquí
+    
     console.log('serviceConsumptions');
     console.log(serviceConsumptions);
 

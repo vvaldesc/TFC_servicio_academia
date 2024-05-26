@@ -4,6 +4,15 @@ export interface Params {
   };
 }
 
+export interface mailParams {
+  price: number;
+  reserved_at: Date;
+  employee_name: string;
+  message: string | null | undefined;
+  receptor_email: string;
+}
+
+
 export interface Result {
   data: any;
   table: string;
