@@ -1,9 +1,9 @@
 import { db, ServiceConsumption, Clients, Employees, Teachers, Students, eq, desc, lt, and, not } from "astro:db";
 import type { APIRoute } from "astro";
-import type { Result, ServiceConsumption_type } from "@/consts/types";
-import { DateTime } from 'luxon';
+import type { Result, ServiceConsumption_type, mailParams } from "@/consts/types";
+ import mailer from "../../../services/mailer";
 
-export const GET = async () => {
+export const GET: APIRoute = async () => {
   const serviceConsumptions = await db.select({
     id: ServiceConsumption.id,
     client_id: Clients.id,
@@ -43,7 +43,6 @@ export const GET = async () => {
   .groupBy(ServiceConsumption.id)
   .orderBy(ServiceConsumption.id, desc(ServiceConsumption.id));
 
-  console.log(serviceConsumptions);
   let status: number = 404;
   let result: Result = {
     data: "undefined" as string | typeof serviceConsumptions,
@@ -70,6 +69,7 @@ export const POST: APIRoute = async (request) => {
   let status: number = 404;
   try {
     const serviceConsumptions: ServiceConsumption_type = await request.request.json();
+    console.log({'serviceConsumptions':serviceConsumptions});
 
     const dateActual = new Date();
     dateActual.setHours(dateActual.getHours() + 2);
@@ -81,9 +81,6 @@ export const POST: APIRoute = async (request) => {
     serviceConsumptions.updated_at = dateActual;
     //@ts-ignore
     serviceConsumptions.reserved_at = new Date(serviceConsumptions.reserved_at); // Corregido aquí
-    
-    console.log('serviceConsumptions');
-    console.log(serviceConsumptions);
 
     const response = await db.insert(ServiceConsumption).values(serviceConsumptions).onConflictDoUpdate({
       target: ServiceConsumption.id,
@@ -92,11 +89,43 @@ export const POST: APIRoute = async (request) => {
     //@ts-ignore
     // serviceConsumptions.id = String(response.columns);
 
-    if (serviceConsumptions) {
+    console.log({'response': response});
+
+    if (response) {
       status = 201;
       result.data = response;
       result.table= "ServiceConsumption";
       result.count = 1;
+
+      const mailParamsCliente: mailParams = {
+        price: serviceConsumptions.price,
+        reserved_at: serviceConsumptions.reserved_at,
+        message: `Buenas ${serviceConsumptions.client_name} su cita con ${serviceConsumptions.employee_name} para ${serviceConsumptions.service_name} ha sido reservada para el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
+        subject: 'Tu reserva ha sido realizada con éxito',
+        employee_name: serviceConsumptions.employee_name,
+        employee_mail: serviceConsumptions.employee_mail,
+        client_name: serviceConsumptions.client_email,
+        client_email: serviceConsumptions.client_name,
+        receptor_email: serviceConsumptions.client_email,
+      };
+
+      const mailParamsEployee: mailParams = {
+        price: serviceConsumptions.price,
+        reserved_at: serviceConsumptions.reserved_at,
+        message: `Buenas ${serviceConsumptions.employee_name} tiene cita para ${serviceConsumptions.service_name} con ${serviceConsumptions.client_name} el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
+        subject: 'Tienes una nueva cita',
+        employee_name: serviceConsumptions.employee_name,
+        employee_mail: serviceConsumptions.employee_mail,
+        client_name: serviceConsumptions.client_email,
+        client_email: serviceConsumptions.client_name,
+        receptor_email: serviceConsumptions.employee_mail,
+      };
+
+      console.log(mailParamsCliente);
+      console.log(mailParamsEployee);
+
+      mailer(mailParamsCliente);
+      mailer(mailParamsEployee);
     }
 
     return new Response(JSON.stringify({ result }), {

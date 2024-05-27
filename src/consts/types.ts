@@ -5,11 +5,15 @@ export interface Params {
 }
 
 export interface mailParams {
-  price: number;
-  reserved_at: Date;
-  employee_name: string;
+  price?: number;
+  reserved_at?: Date;
   message: string | null | undefined;
-  receptor_email: string;
+  subject: string;
+  employee_name?: string;
+  employee_mail?: string;
+  client_name?: string;
+  client_email?: string;
+  receptor_email?: string;
 }
 
 
@@ -56,8 +60,13 @@ export enum Weather {
 export interface ServiceConsumption_type {
   id:         number;
   service_id:  number;
+  service_name:  number;
   employee_id: number;
+  employee_name: string;
+  employee_mail: string;
   client_id:   number;
+  client_email:   string;
+  client_name:   string;
   rating?:      number;
   price:       number;
   delay?:       number;

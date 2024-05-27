@@ -113,8 +113,8 @@ export default async function seed() {
   
   await db.insert(Clients).values([
     { 
-      name: 'John Doe', 
-      surname: 'Doe', 
+      name: 'Víctor', 
+      surname: 'Valdés Cobos', 
       email: 'victorvaldescobos@gmail.com', 
       phone_number: '123456789', 
       address: '123 Main St', 
