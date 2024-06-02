@@ -7,17 +7,14 @@ const url = process.env.VITE_HOST;
 const port = process.env.VITE_PORT;
 console.log(url);
 console.log(port);
-//import laboralDate from './services/utils/laboralDate';
-// import updateServicesDetails from './updateServicesDetails';
 console.log("Cron Job is running...");
 
-export const scheduleJobs = () => {
+export const scheduleUpdateDetails = async () => {
   cron.schedule("* * * * *", () => {
     console.log("cron tick");
     const date = new Date();
     if (date.getMinutes() === 30) {
       console.log("update services details");
-      //updateServicesDetails();
       const body = {
         cronUpdate: true,
       };
@@ -34,36 +31,28 @@ export const scheduleJobs = () => {
   });
 };
 
+export const scheduleFirstDayOfMonth = async () => {
+  cron.schedule('0 0 * * *', () => {
+    console.log("cron tick");
+    const date = new Date();
+    if (date.getDate() === 1) {
+      console.log("It is the first day of the month");
+      const body = {
+        cronUpdate: true,
+      };
+      axios.put(`${url}:${port}/api/employeepayrolls/employeepayrolls`, body);
+      axios.put(`${url}:${port}/api/misc/studentsubjectmensuality/studentsubjectmensuality`, body);
+    } else {
+      console.log("It is not the first day of the month");
+    }
+  });
+};
+
 try {
   await new Promise((resolve) => setTimeout(resolve, 5000));
   await axios.get(`${url}:${port}/api/misc/ping/ping`);
-  scheduleJobs();
+  scheduleUpdateDetails();
+  scheduleFirstDayOfMonth();
 } catch (error) {
   console.error("Error in cron job", error);
 }
-
-// async function checkServer() {
-//   try {
-//     const response = await axios.get(`${url}:${port}/api/misc/ping/ping`);
-//     if (response.status === 404) {
-//       return true;
-//     }
-//     return true;
-//   } catch (error) {
-//     console.error('Server is not running', error);
-//     return false;
-//   }
-// }
-
-// async function runJobs() {
-//   await new Promise(resolve => setTimeout(resolve, 5000));
-//   const serverIsActive = await checkServer();
-//   if (serverIsActive) {
-//     console.log('Server is running');
-//     scheduleJobs();
-//   } else {
-//     console.log('Cannot run jobs. Server is not running.');
-//   }
-// }
-
-// runJobs();
