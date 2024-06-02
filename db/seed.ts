@@ -1,5 +1,6 @@
-import { db, Clients, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Disciplines, Courses, ClientTeacherTexts, ServiceConsumption, Reservations, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
+import { db, Clients, StudentSubjectMensuality, EmployeePayrolls, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Disciplines, Courses, ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
 import { Weather } from '../src/consts/types';
+import { date } from 'astro/zod';
 
 export default async function seed() {
 
@@ -39,7 +40,7 @@ export default async function seed() {
       username: 'emilyjohnson', 
       confirmed: true, 
       image: 'https://example.com/emilyjohnson.jpg', 
-      active: true 
+      active: true
     },
     { 
       id: 3,
@@ -74,6 +75,7 @@ export default async function seed() {
       active: true 
     },
   ];
+  console.log('teacherRecords created');
 
   function isTeacher(employeeId: number): boolean {
     return teacherRecords.some(record => record.id === employeeId);
@@ -85,6 +87,9 @@ export default async function seed() {
     const delay = weather === Weather.Snowy ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20);
 
     let reserved_at = new Date();
+    reserved_at.setFullYear(2024); // Establece el año a 2024
+    reserved_at.setMonth(Math.floor(Math.random() * 6)); // Genera un mes aleatorio
+    reserved_at.setDate(Math.floor(Math.random() * 28) + 1); // Genera un día aleatorio
     reserved_at.setMinutes(Math.random() < 0.5 ? 30 : 0);
     reserved_at.setSeconds(0);
     
@@ -100,38 +105,35 @@ export default async function seed() {
       client_id: Math.floor(Math.random() * 2) + 1, // Hay 2 clientes      rating: rating,
       price: Math.round((Math.random() * 500) * 10) / 10,
       delay: delay,
-      created_at: new Date(2022, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+      created_at: new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
       reserved_at: reserved_at,
       state: Math.random() < 0.5 ? 'Pending' : 'Cancelled',
       weather: weather,
     };
     serviceConsumptionRecords.push(record);
   }
-
-  console.log({'serviceConsumptionRecords':serviceConsumptionRecords});
-
+  console.log('serviceConsumptionRecords created');
   
   await db.insert(Clients).values([
     { 
       name: 'Víctor', 
       surname: 'Valdés Cobos', 
       email: 'victorvaldescobos@gmail.com', 
-      phone_number: '123456789', 
+      phone_number: '123459789', 
       address: '123 Main St', 
       city: 'New York', 
       bornDate: new Date('1990-01-01'), 
       created_at: new Date(), 
       updated_at: new Date(), 
-      username: 'johndoe', 
+      username: 'johndoedd', 
       confirmed: true, 
-      image: 'https://example.com/johndoe.jpg', 
-      active: false 
+      active: true 
     },
     { 
       name: 'Jane Smith', 
       surname: 'Smith', 
       email: 'janesmith@example.com', 
-      phone_number: '987654321', 
+      phone_number: '987654121', 
       address: '456 Elm St', 
       city: 'Los Angeles', 
       bornDate: new Date('1985-01-01'), 
@@ -139,7 +141,6 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'janesmith', 
       confirmed: true, 
-      image: 'https://example.com/janesmith.jpg', 
       active: true 
     }
   ]);
@@ -756,18 +757,21 @@ export default async function seed() {
       teacher_id: 1,
       course_id: 'FP_MP1',
       name: 'Corte de cabello y peinados',
+      price: 20
     },
     {
       acronym: 'COC',
       teacher_id: 2,
       course_id: 'FP_MP1',
       name: 'Coloración del cabello',
+      price: 20
     },
     {
       acronym: 'TCP',
       teacher_id: 3,
       course_id: 'FP_MP1',
       name: 'Tratamientos capilares',
+      price: 20
     },
     // Asignaturas para el curso de Estética 1
     {
@@ -775,18 +779,21 @@ export default async function seed() {
       teacher_id: 1,
       course_id: 'FP_BE1',
       name: 'Cuidado de la piel',
+      price: 20
     },
     {
       acronym: 'MPR',
       teacher_id: 3,
       course_id: 'FP_BE1',
       name: 'Maquillaje profesional',
+      price: 20
     },
     {
       acronym: 'MYP',
       teacher_id: 2,
       course_id: 'FP_BE1',
       name: 'Manicura y pedicura',
+      price: 20
     },
     // Asignaturas para el curso de Peluquería 2
     {
@@ -794,18 +801,21 @@ export default async function seed() {
       teacher_id: 4,
       course_id: 'FP_MP2',
       name: 'Corte de barba y bigote',
+      price: 20
     },
     {
       acronym: 'ECB',
       teacher_id: 4,
       course_id: 'FP_MP2',
       name: 'Estilismo en el cabello',
+      price: 20
     },
     {
       acronym: 'BAR',
       teacher_id: 4,
       course_id: 'FP_MP2',
       name: 'Cuidado de la barba',
+      price: 20
     },
     // Asignaturas para el curso de Estética 2
     {
@@ -813,18 +823,21 @@ export default async function seed() {
       teacher_id: 1,
       course_id: 'FP_BE2',
       name: 'Introducción a la cosmetología',
+      price: 20
     },
     {
       acronym: 'PCO',
       teacher_id: 2,
       course_id: 'FP_BE2',
       name: 'Uñas de gel y acrílicas',
+      price: 20
     },
     {
       acronym: 'TAC',
       teacher_id: 1,
       course_id: 'FP_BE2',
       name: 'Técnicas de aplicación de cosméticos',
+      price: 20
     },
   ]);
   console.log('Subjects inserted');
@@ -865,6 +878,41 @@ export default async function seed() {
     }
   ]);
   console.log('Servers inserted');
+
+  const EmployeePayrollsGenerator = async () => {
+    // Genera las fechas de cada mes desde enero hasta hoy
+    const months = [];
+      for (let month = 1; month <= new Date().getMonth(); month++) {
+        if (
+          month > new Date().getMonth() + 1
+        ) {
+          break;
+        }
+        months.push(month);
+      }
+
+    // Para cada empleado y para cada fecha, inserta un registro
+    for (let employee_id = 2; employee_id <= 4; employee_id++) {
+      let amount = Math.floor(100 + Math.random() * 1100); // Genera un salario aleatorio de 3 cifras
+
+      for (const month of months) {
+        await db.insert(EmployeePayrolls).values([
+          {
+            employee_id: employee_id,
+            month: month,
+            amount: amount,
+          },
+        ]);
+
+        // Ocasionalmente, aumenta el salario
+        if (Math.random() < 0.1) {
+          amount += 50;
+        }
+      }
+    }
+  };
+  EmployeePayrollsGenerator();
+  console.log('EmployeePayrolls inserted');
 
   await db.insert(ClientTeacherTexts).values([
     {
@@ -909,76 +957,9 @@ export default async function seed() {
     },
   ]);
   console.log('ClientTeacherTexts inserted');
-  
-
-  // await db.insert(ServiceConsumption).values([
-  //   {
-  //     service_id: 1,
-  //     employee_id: 1,
-  //     client_id: 1,
-  //     rating: 4.5,
-  //     price: 100.0,
-  //     delay: 0,
-  //     created_at: new Date(2022, 1, 1),
-  //     reserved_at: today,
-  //     state: 'confirmed',
-  //     weather: Weather.Snowy,
-  //   },
-  //   {
-  //     service_id: 2,
-  //     employee_id: 1,
-  //     client_id: 1,
-  //     rating: 3.0,
-  //     price: 200.0,
-  //     delay: 19,
-  //     created_at: new Date(2022, 1, 2),
-  //     reserved_at: today,
-  //     state: 'cancelled',
-  //     weather: Weather.Sunny,
-  //   },
-  //   {
-  //     service_id: 3,
-  //     employee_id: 3,
-  //     client_id: 1,
-  //     rating: 5.0,
-  //     price: 150.0,
-  //     delay: 0,
-  //     created_at: new Date(2022, 1, 3),
-  //     reserved_at: today,
-  //     state: 'confirmed',
-  //     weather: Weather.Sunny,
-  //   },
-  //   {
-  //     service_id: 4,
-  //     employee_id: 4,
-  //     client_id: 1,
-  //     rating: 4.0,
-  //     price: 250.0,
-  //     delay: 5,
-  //     created_at: new Date(2022, 1, 4),
-  //     reserved_at: today,
-  //     state: 'pending',
-  //     weather: Weather.Cloudy,
-  //   },
-  //   {
-  //     service_id: 5,
-  //     employee_id: 5,
-  //     client_id: 2,
-  //     rating: 3.5,
-  //     price: 300.0,
-  //     delay: 0,
-  //     created_at: new Date(2022, 1, 5),
-  //     reserved_at: today,
-  //     state: 'confirmed',
-  //     weather: Weather.Sunny,
-  //   },
-  // ]);
-
 
   await db.insert(ServiceConsumption).values(serviceConsumptionRecords);
   console.log('ServiceConsumption inserted');
-
-  // await db.insert(ClientServerConnections).values([]);
 
   const subjects = ['CPP', 'COC', 'TCP', 'CPL', 'MPR', 'MYP', 'CBB', 'ECB', 'BAR', 'ICO', 'PCO', 'TAC'];
   const enrolments = [];
@@ -988,58 +969,13 @@ export default async function seed() {
       enrolments.push({
         student_id: i,
         subject_acronym: subjects[(i + j - 1) % subjects.length],
-        date: new Date(),
+        enrolled_at: new Date(2023, 8, Math.floor(Math.random() * 30) + 1)
       });
     }
   }
   
   await db.insert(StudentSubjectEnrolments).values(enrolments);
   console.log('StudentSubjectEnrolments inserted');
-
-
-  // await db.insert(StudentSubjectFaults).values([
-  //   {
-  //     student_id: 1,
-  //     subject_acronym: 'MATH201',
-  //     date: new Date(),
-  //     justified: true,
-  //     justification: 'Medical leave',
-  //     description: 'Missed class due to illness',
-  //   },
-  //   {
-  //     student_id: 2,
-  //     subject_acronym: 'MATH201',
-  //     date: new Date(),
-  //     justified: false,
-  //     justification: null,
-  //     description: 'Missed class without reason',
-  //   },
-  //   {
-  //     student_id: 3,
-  //     subject_acronym: 'PHYS301',
-  //     date: new Date(),
-  //     justified: true,
-  //     justification: 'Family emergency',
-  //     description: 'Missed class due to personal reasons',
-  //   },
-  //   {
-  //     student_id: 4,
-  //     subject_acronym: 'CHEM401',
-  //     date: new Date(),
-  //     justified: false,
-  //     justification: null,
-  //     description: 'Missed class without reason',
-  //   },
-  //   {
-  //     student_id: 5,
-  //     subject_acronym: 'BIO501',
-  //     date: new Date(),
-  //     justified: true,
-  //     justification: 'Vacation',
-  //     description: 'Missed class due to travel',
-  //   },
-  // ]);
-
 
   await db.insert(ClientArticleInteractions).values([
     {
@@ -1099,5 +1035,29 @@ export default async function seed() {
     },
   ]);
   console.log('ClientArticleInteractions inserted');
+
+
+
+  // Obtén el mes actual
+  const currentMonth = new Date().getMonth() + 1;
+  // Calcula el número de meses desde septiembre
+  const monthsSinceSeptember = currentMonth >= 9 ? currentMonth - 9 : currentMonth + 3;
+  // Crea un array para almacenar los valores a insertar
+  const mensualities = [];
+
+  // Itera sobre los ID de los estudiantes
+  for (let enrolment_id = 1; enrolment_id <= 59; enrolment_id++) {
+    // Para cada estudiante, crea un pago para cada mes desde septiembre
+    for (let month = 0; month < monthsSinceSeptember; month++) {
+      mensualities.push({
+        enrolment_id: enrolment_id,
+        amount: 60,
+        date: new Date(2023, 8 + month, 1),
+      });
+    }
+  }
+
+  // Inserta los valores en la base de datos
+  await db.insert(StudentSubjectMensuality).values(mensualities);
 
 };

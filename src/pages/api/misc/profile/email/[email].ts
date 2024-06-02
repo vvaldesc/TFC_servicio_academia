@@ -35,3 +35,25 @@ export const GET: APIRoute = async ({ params }) => {
     },
   });
 };
+
+export const PUT: APIRoute = async ({ params }) => {
+  const { email } = params;
+
+  // Actualiza la columna 'active' en cada tabla
+  const queryClients = sql`UPDATE Clients SET active = false WHERE email = ${sql.param(email)}`;
+  const queryTeachers = sql`UPDATE Teachers SET active = false WHERE email = ${sql.param(email)}`;
+  const queryStudents = sql`UPDATE Students SET active = false WHERE email = ${sql.param(email)}`;
+
+  // Ejecuta las consultas
+  await db.run(queryClients);
+  await db.run(queryTeachers);
+  await db.run(queryStudents);
+
+  // Retorna una respuesta indicando que la operación fue exitosa
+  return new Response(JSON.stringify({ message: 'User deactivated successfully' }), {
+    status: 200,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};

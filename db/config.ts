@@ -89,6 +89,7 @@ const Subjects = defineTable({
     teacher_id: column.number({ references: () => Teachers.columns.id }),
     course_id: column.text({ references: () => Courses.columns.acronym }),
     name: column.text(),
+    price: column.number({default: 0}),
   },
 });
 
@@ -99,6 +100,15 @@ const Employees = defineTable({
     student_id: column.number({ optional: true, references: () => Students.columns.id }),
     social_security: column.text({ unique: true }),
     salary: column.number({ default: 0 }),
+  },
+});
+
+const EmployeePayrolls = defineTable({
+  columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
+    employee_id: column.number({ references: () => Employees.columns.id }),
+    month: column.number(),
+    amount: column.number(),
   },
 });
 
@@ -190,6 +200,15 @@ const StudentSubjectEnrolments = defineTable({
     id: column.number({ primaryKey: true, autoIncrement: true }),
     student_id: column.number({ references: () => Students.columns.id }),
     subject_acronym: column.text({ references: () => Subjects.columns.acronym }),
+    enrolled_at: column.date(),
+  },
+});
+
+const StudentSubjectMensuality = defineTable({
+  columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
+    enrolment_id: column.number({ references: () => StudentSubjectEnrolments.columns.id }),
+    amount: column.number(),
     date: column.date(),
   },
 });
@@ -224,6 +243,8 @@ const ClientArticleInteractions = defineTable({
 // prettier-ignore
 export default defineDb({
   tables:
-   { Clients, Students, Employees, Services, Teachers, Subjects, Articles, Servers, Courses, Disciplines,
-    ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions}
+   {Clients, Students, Employees, Services, Teachers, Subjects, Articles, Servers, Courses, Disciplines,
+    ClientTeacherTexts, ServiceConsumption, ClientServerConnections,
+    StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions,
+    EmployeePayrolls, StudentSubjectMensuality}
 });

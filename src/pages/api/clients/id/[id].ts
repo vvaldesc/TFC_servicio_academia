@@ -28,3 +28,31 @@ export const GET: APIRoute = async ({ params }) => {
     },
   });
 };
+
+export const DELETE: APIRoute = async ({ params }) => {
+	const { id } = params
+
+  // const client = await db
+  //   .delete(Clients)
+  //   .where(eq(Clients.id, Number(id)));
+
+  const client = await db.update(Clients)
+  .set({active: false})
+
+  let status: number = 404;
+  let result: Result = {
+    data: "undefined" as string | typeof client,
+    table: "Clients" as string,
+    count: client.rowsAffected as number,
+  };
+  // Verifica si se encontraron clientes y actualiza el mensaje y el estado correspondientemente
+  client.rowsAffected == 1 && ((result.data = client), (status = 200));
+
+  // Retorna la respuesta con el resultado de la consulta
+  return new Response(JSON.stringify({result}), {
+    status: status,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};

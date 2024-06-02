@@ -1,4 +1,4 @@
-import { db, ServiceConsumption, Clients, Employees, Teachers, Students, eq, desc, lt, and, not } from "astro:db";
+import { db, ServiceConsumption, Clients, Services, Employees, Teachers, Students, avg, eq, desc, lt, and, not } from "astro:db";
 import type { APIRoute } from "astro";
 import type { Result, ServiceConsumption_type, mailParams } from "@/consts/types";
  import mailer from "../../../services/mailer";
@@ -9,12 +9,16 @@ export const GET: APIRoute = async () => {
     client_id: Clients.id,
     teacher_id: Teachers.id,
     student_id: Students.id,
+    employee_id: Employees.id,
     delay: ServiceConsumption.delay,
     service_id: ServiceConsumption.id,
+    service_name: Services.name,
+    service_price: Services.price,
+    service_discipline: Services.discipline,
     created_at: ServiceConsumption.created_at,
     updated_at: ServiceConsumption.updated_at,
     reserved_at: ServiceConsumption.reserved_at,
-    rating: ServiceConsumption.rating,
+    rating: avg(ServiceConsumption.rating),
     price: ServiceConsumption.price,
     weather: ServiceConsumption.weather,
     client_name: Clients.name,
@@ -38,6 +42,7 @@ export const GET: APIRoute = async () => {
   .from(ServiceConsumption)
   .leftJoin(Clients, eq(ServiceConsumption.client_id, Clients.id))
   .leftJoin(Employees, eq(ServiceConsumption.employee_id, Employees.id))
+  .leftJoin(Services, eq(ServiceConsumption.service_id, Services.id))
   .leftJoin(Teachers, eq(Employees.teacher_id, Teachers.id))
   .leftJoin(Students, eq(Employees.student_id, Students.id))
   .groupBy(ServiceConsumption.id)
