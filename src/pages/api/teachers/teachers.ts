@@ -22,3 +22,33 @@ export const GET = async () => {
     },
   });
 };
+
+export const POST = async (request: Request) => {
+  const { body } = await request.json();
+  
+  // Assuming the body contains the necessary data for creating a new course
+
+  const teacher = await db.insert(Teachers).values(body).onConflictDoUpdate({
+    target: Teachers.id,
+    set: body,
+  });
+
+  let status: number = 404;
+  let result: Result = {
+    data: "undefined" as string | typeof teacher,
+    table: "Teachers" as string,
+    count: 0,
+  };
+
+  if (teacher) {
+    status = 201;
+    result.data = teacher;
+  }
+
+  return new Response(JSON.stringify({ result }), {
+    status: status,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};

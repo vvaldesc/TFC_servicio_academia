@@ -243,7 +243,8 @@ const ClientArticleInteractions = defineTable({
 // prettier-ignore
 export default defineDb({
   tables:
-   {Clients, Students, Employees, Services, Teachers, Subjects, Articles, Servers, Courses, Disciplines,
+   {Clients, Students, Employees, Services, Teachers, Subjects, Articles,
+    Servers, Courses, Disciplines,
     ClientTeacherTexts, ServiceConsumption, ClientServerConnections,
     StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions,
     EmployeePayrolls, StudentSubjectMensuality}
