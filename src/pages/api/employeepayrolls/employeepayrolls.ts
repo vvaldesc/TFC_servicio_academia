@@ -4,22 +4,22 @@ import type { Result } from "@/consts/types";
 
 export const GET = async () => {
 
-    const details = await db.select()
+    const employeepayrolls = await db.select()
     .from(EmployeePayrolls);
 
   let status: number = 404;
   let result: Result = {
-    data: "undefined" as string | typeof details,
+    data: "undefined" as string | typeof employeepayrolls,
     table: "Subjects" as string,
     count: 0 as number,
   };
 
-  if (details) {
+  if (employeepayrolls) {
     status = 200;
     result = {
-      data: details,
-      table: "details" as string,
-      count: details.length as number,
+      data: employeepayrolls,
+      table: "EmployeePayrolls" as string,
+      count: employeepayrolls.length as number,
     };
   }
 
