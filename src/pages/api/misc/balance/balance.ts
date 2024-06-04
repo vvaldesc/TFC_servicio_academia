@@ -41,6 +41,7 @@ export const GET = async () => {
     .groupBy(sql`strftime('%m', ServiceConsumption.reserved_at) + 0`);
 
   const totalsArray = [];
+  console.log(mensualities, payrolls, details);
 
   for (let month = 1; month <= 12; month++) {
     const formattedMonth = month.toString().padStart(2, "0");
@@ -51,9 +52,9 @@ export const GET = async () => {
     const payroll: number = isNaN(Number(payrolls.find((p) => p.month === formattedMonthNumber)?.total_paid)) ? 0 : Number(payrolls.find((p) => p.month === formattedMonthNumber)?.total_paid);
     const detail: number = isNaN(Number(details.find((d) => d.month === formattedMonthNumber)?.details_income)) ? 0 : Number(details.find((d) => d.month === formattedMonthNumber)?.details_income);
 
-    console.log(mensualitie, payroll, detail);
+    const total: number = mensualitie - payroll + detail;
+    console.log(mensualitie, payroll, detail, total);
 
-    const total: number = mensualitie + payroll + detail;
 
     totalsArray.push({
       month: key,
