@@ -1,4 +1,10 @@
-import { db, Clients, StudentSubjectMensuality, EmployeePayrolls, Teachers, Students, Subjects, Employees, Services, Articles, Servers, Disciplines, Courses, ClientTeacherTexts, ServiceConsumption, ClientServerConnections, StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
+import { db, Clients, StudentSubjectMensuality,
+   EmployeePayrolls, Teachers, Students,
+    Subjects, Employees, Services, Articles,
+     Servers, Disciplines, Courses,
+      ClientTeacherTexts, ServiceConsumption,
+       ClientServerConnections, StudentSubjectEnrolments,
+        StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
 import { Weather } from '../src/consts/types';
 import { date } from 'astro/zod';
 
@@ -82,7 +88,7 @@ export default async function seed() {
   }
 
   const serviceConsumptionRecords = [];
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 300; i++) {
     const weather = Math.random() < 0.33 ? Weather.Snowy : (Math.random() < 0.5 ? Weather.Sunny : Weather.Cloudy);
     const delay = weather === Weather.Snowy ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20);
 
@@ -162,64 +168,56 @@ export default async function seed() {
   await db.insert(Services).values([
     {
         name: 'Tratamiento Facial',
-        price: 50,
-        duration: 75,
+        price: 20,
         description: 'Revitaliza tu piel con nuestro tratamiento facial.',
         discipline: 'Estética',
         image: 'https://example.com/facial.jpg',
     },
     {
         name: 'Manicura',
-        price: 25,
-        duration: 45,
+        price: 10,
         description: 'Obtén una manicura profesional.',
         discipline: 'Estética',
         image: 'https://example.com/manicure.jpg',
     },
     {
         name: 'Pedicura',
-        price: 30,
-        duration: 60,
+        price: 15,
         description: 'Consiente tus pies con nuestro servicio de pedicura.',
         discipline: 'Estética',
         image: 'https://example.com/pedicure.jpg',
     },
     {
         name: 'Exfoliación Corporal',
-        price: 40,
-        duration: 60,
+        price: 20,
         description: 'Exfolia y renueva tu piel con una exfoliación corporal.',
         discipline: 'Estética',
         image: 'https://example.com/bodyscrub.jpg',
     },
     {
         name: 'Corte de Pelo',
-        price: 20,
-        duration: 30,
+        price: 5,
         description: 'Obtén un corte de pelo con estilo de nuestros estilistas profesionales.',
         discipline: 'Peluquería',
         image: 'https://example.com/haircut.jpg',
     },
     {
         name: 'Coloración de Pelo',
-        price: 60,
-        duration: 120,
+        price: 20,
         description: 'Añade color a tu cabello con nuestro servicio de coloración.',
         discipline: 'Peluquería',
         image: 'https://example.com/haircoloring.jpg',
     },
     {
         name: 'Peinado',
-        price: 40,
-        duration: 45,
+        price: 20,
         description: 'Consigue el peinado perfecto para cualquier ocasión.',
         discipline: 'Peluquería',
         image: 'https://example.com/hairstyling.jpg',
     },
     {
         name: 'Tratamiento de Keratina',
-        price: 80,
-        duration: 90,
+        price: 30,
         description: 'Alisa y fortalece tu cabello con un tratamiento de keratina.',
         discipline: 'Peluquería',
         image: 'https://example.com/keratin.jpg',
@@ -1048,7 +1046,7 @@ export default async function seed() {
   // Itera sobre los ID de los estudiantes
   for (let student_id = 1; student_id <= 20; student_id++) {
     // Para cada estudiante, crea un pago para cada mes desde septiembre
-    for (let month = 0; month < monthsSinceSeptember - 4; month++) {
+    for (let month = 0; month < monthsSinceSeptember + 1; month++) {
       mensualities.push({
         student_id: student_id,
         amount: 60,

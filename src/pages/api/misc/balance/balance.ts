@@ -17,6 +17,7 @@ export const GET = async () => {
       total_paid: sum(StudentSubjectMensuality.amount),
     })
     .from(StudentSubjectMensuality)
+    .where(sql`strftime('%Y', StudentSubjectMensuality.date) = '2024'`)
     .groupBy(sql`strftime('%m', StudentSubjectMensuality.date) + 0`);
 
   const payrolls = await db
@@ -64,7 +65,7 @@ export const GET = async () => {
 
   let status: number = 404;
   let result: Result = {
-    data: "undefined" as string | typeof subjects,
+    data: "undefined" as string | any[],
     table: "Subjects" as string,
     count: 0 as number,
   };

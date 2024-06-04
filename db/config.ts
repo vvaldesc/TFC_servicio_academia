@@ -117,10 +117,8 @@ const Services = defineTable({
     id: column.number({ primaryKey: true, autoIncrement: true }),
     name: column.text({ unique: true }),
     price: column.number(),
-    duration: column.number(),
     description: column.text({ optional: true }),
     discipline: column.text({ references: () => Disciplines.columns.name }),
-    image: column.text({ optional: true }),
   },
 });
 
