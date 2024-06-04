@@ -1046,11 +1046,11 @@ export default async function seed() {
   const mensualities = [];
 
   // Itera sobre los ID de los estudiantes
-  for (let enrolment_id = 1; enrolment_id <= 59; enrolment_id++) {
+  for (let student_id = 1; student_id <= 20; student_id++) {
     // Para cada estudiante, crea un pago para cada mes desde septiembre
     for (let month = 0; month < monthsSinceSeptember; month++) {
       mensualities.push({
-        enrolment_id: enrolment_id,
+        student_id: student_id,
         amount: 60,
         date: new Date(2023, 8 + month, 1),
       });

@@ -207,7 +207,7 @@ const StudentSubjectEnrolments = defineTable({
 const StudentSubjectMensuality = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
-    enrolment_id: column.number({ references: () => StudentSubjectEnrolments.columns.id }),
+    student_id: column.number({ references: () => Students.columns.id }),
     amount: column.number(),
     date: column.date(),
   },
