@@ -14,6 +14,7 @@ export interface mailParams {
   client_name?: string;
   client_email?: string;
   receptor_email?: string;
+  feedback?: boolean;
 }
 
 

@@ -112,6 +112,7 @@ export const POST: APIRoute = async (request) => {
         client_name: serviceConsumptions.client_email,
         client_email: serviceConsumptions.client_name,
         receptor_email: serviceConsumptions.client_email,
+        feedback: true,
       };
 
       const mailParamsEployee: mailParams = {
@@ -124,6 +125,7 @@ export const POST: APIRoute = async (request) => {
         client_name: serviceConsumptions.client_email,
         client_email: serviceConsumptions.client_name,
         receptor_email: serviceConsumptions.employee_mail,
+        feedback: true,
       };
 
       console.log(mailParamsCliente);
@@ -159,27 +161,63 @@ export const PUT: APIRoute = async (request) => {
   let status: number = 404;
   try {
     const updateParams: any = await request.request.json();
-    console.log(request);
-    console.log('updateParams');
-    console.log(updateParams);
 
     let dateISO = new Date();
     dateISO.setHours(dateISO.getHours() + 2);
     
     let datesISO_check = new Date(dateISO.getTime());
     datesISO_check.setMinutes(datesISO_check.getMinutes() - 30);
-    
-    console.log({'dateISO':dateISO});
-    console.log({'datesISO_check':datesISO_check});
 
-    const response = updateParams.cronUpdate && await db.update(ServiceConsumption)
-    .set({state: 'Completed',updated_at: dateISO as Date})
-    .where(
-      and(
-        lt(ServiceConsumption.reserved_at, datesISO_check as Date),
-        not(eq(ServiceConsumption.state, 'Completed'))
-      )
-    );
+    let response;
+    if (updateParams.cronUpdate) {
+      response = await db.update(ServiceConsumption)
+      .set({state: 'Completed',updated_at: dateISO as Date})
+      .where(
+        and(
+          lt(ServiceConsumption.reserved_at, datesISO_check as Date),
+          not(eq(ServiceConsumption.state, 'Completed'))
+        )
+      );
+    } else if (updateParams.id) {
+      console.log({'updateParams':updateParams});
+      response = await db.update(ServiceConsumption)
+      .set({state: updateParams.state, updated_at: dateISO as Date})
+      .where(eq(ServiceConsumption.id, updateParams.id));
+
+      console.log({'response':response});
+
+      updateParams.reserved_at = new Date(updateParams.reserved_at);
+
+      const mailParamsCliente: mailParams = {
+        price: updateParams.price,
+        reserved_at: updateParams.reserved_at,
+        message: `Buenas ${updateParams.client_name} su cita con ${updateParams.employee_name} para ${updateParams.service_name} ha sido cancelada, reservada el día ${updateParams.reserved_at.toLocaleDateString()} a las ${updateParams.reserved_at.toLocaleTimeString()}`,
+        subject: 'Cita cancelada',
+        employee_name: updateParams.employee_name,
+        employee_mail: updateParams.employee_mail,
+        client_name: updateParams.client_email,
+        client_email: updateParams.client_name,
+        receptor_email: updateParams.client_email,
+      };
+
+      const mailParamsEployee: mailParams = {
+        price: updateParams.price,
+        reserved_at: updateParams.reserved_at,
+        message: `Buenas ${updateParams.employee_name} su cita con ${updateParams.client_name} para ${updateParams.service_name} ha sido cancelada, reservada el día ${updateParams.reserved_at.toLocaleDateString()} a las ${updateParams.reserved_at.toLocaleTimeString()}`,
+        subject: 'Cita cancelada',
+        employee_name: updateParams.employee_name,
+        employee_mail: updateParams.employee_mail,
+        client_name: updateParams.client_email,
+        client_email: updateParams.client_name,
+        receptor_email: updateParams.employee_mail,
+      };
+
+      console.log(mailParamsCliente);
+      console.log(mailParamsEployee);
+
+      mailer(mailParamsCliente);
+      mailer(mailParamsEployee);
+    }
 
     if (response) {
       status = 200;
@@ -196,6 +234,7 @@ export const PUT: APIRoute = async (request) => {
     });
   } catch (error) {
     //@ts-ignore
+    console.log({'error':error});
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: {

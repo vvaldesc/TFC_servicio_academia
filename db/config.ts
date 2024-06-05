@@ -183,12 +183,11 @@ const ServiceConsumption = defineTable({
 const ClientServerConnections = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
-    client_id: column.number({ references: () => Clients.columns.id }),
     server_nick: column.text({ references: () => Servers.columns.nickname }),
     estimated_client_location: column.text({ optional: true }),
     device_type: column.text({ optional: true }),
     file_download: column.text({ optional: true }),
-    created_at: column.date(),
+    created_at: column.date({ optional: true }),
     client_IP: column.text({ optional: true }),
   },
 });
