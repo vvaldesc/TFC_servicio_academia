@@ -16,15 +16,16 @@ export const GET: APIRoute = async ({ params }) => {
 `;
   //@ts-ignore
   const sqlResult: Data = await db.run(query) as Data;
+  const data = {id: sqlResult.rows[0][0], tableName: sqlResult.rows[0][1]};
 
   let status: number = 404;
   let result: Result = {
-    data: "undefined" as string | SqlProfileByEmail,
-    table: "Clients" as string,
-    count: 1 as number,
+    data: sqlResult ? data : "undefined" as string | any[],
+    table: sqlResult.rows[0][1] as string,
+    count: sqlResult.rows.length as number,
   };
   // Verifica si se encontraron clientes y actualiza el mensaje y el estado correspondientemente
-  result.count == 1 && ((result.data = sqlResult), (status = 200));
+  result.count == 1 && (status = 200);
 
 
   // Retorna la respuesta con el resultado de la consulta

@@ -28,7 +28,7 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'johnsmith', 
       confirmed: true, 
-      image: 'https://example.com/johnsmith.jpg', 
+      image: 'https://static.diariofemenino.com/media/13502/carta-gracias-profesor.jpg', 
       active: true,
       is_admin: true
     },
@@ -45,7 +45,7 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'emilyjohnson', 
       confirmed: true, 
-      image: 'https://example.com/emilyjohnson.jpg', 
+      image: 'https://static9.depositphotos.com/1070812/1091/i/450/depositphotos_10916856-stock-photo-teacher-on-background-of-blackboard.jpg', 
       active: true
     },
     { 
