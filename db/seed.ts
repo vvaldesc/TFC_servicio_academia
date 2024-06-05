@@ -6,7 +6,6 @@ import { db, Clients, StudentSubjectMensuality,
        ClientServerConnections, StudentSubjectEnrolments,
         StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
 import { Weather } from '../src/consts/types';
-import { date } from 'astro/zod';
 
 export default async function seed() {
 
@@ -28,7 +27,7 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'johnsmith', 
       confirmed: true, 
-      image: 'https://example.com/johnsmith.jpg', 
+      image: 'https://th.bing.com/th/id/OIP.jhmz76QX-t6yJ4E6DJYEjgHaLO?rs=1&pid=ImgDetMain', 
       active: true,
       is_admin: true
     },
@@ -45,7 +44,7 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'emilyjohnson', 
       confirmed: true, 
-      image: 'https://example.com/emilyjohnson.jpg', 
+      image: 'https://th.bing.com/th/id/OIP.l3rAckL5Qizjj2rbCdEHFgHaLH?rs=1&pid=ImgDetMain', 
       active: true
     },
     { 
@@ -61,7 +60,7 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'michaelbrown', 
       confirmed: true, 
-      image: 'https://example.com/michaelbrown.jpg', 
+      image: 'https://th.bing.com/th/id/R.636fe924035c8adfacdc45693c21db94?rik=3s8CyZiJBqaDbw&pid=ImgRaw&r=0', 
       active: true 
     },
     { 
@@ -77,7 +76,7 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'sarahdavis', 
       confirmed: true, 
-      image: 'https://example.com/sarahdavis.jpg', 
+      image: 'https://th.bing.com/th/id/R.a82f5839edfe663ed6de9962565373bc?rik=QtmuPebfhMAVfA&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2016%2f03%2f01%2f304194-face-women-portrait.jpg&ehk=eyuWeJvwcHdgi1YNycX2f0pF4PvajRD1sv5AVAP2Qlw%3d&risl=&pid=ImgRaw&r=0', 
       active: true 
     },
   ];
@@ -115,6 +114,7 @@ export default async function seed() {
       reserved_at: reserved_at,
       state: Math.random() < 0.5 ? 'Pending' : 'Cancelled',
       weather: weather,
+      rating: isTeacher(employee_id) ? Math.floor(Math.random() * 6) + 5 : Math.floor(Math.random() * 6),
     };
     serviceConsumptionRecords.push(record);
   }
@@ -133,7 +133,7 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'johndoedd', 
       confirmed: true, 
-      active: true 
+      active: true,
     },
     { 
       name: 'Jane Smith', 
@@ -336,7 +336,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'juanperez',
       confirmed: true,
-      image: 'https://example.com/juanperez.jpg',
       active: true
     },
     {
@@ -355,7 +354,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'mariagomez',
       confirmed: true,
-      image: 'https://example.com/mariagomez.jpg',
       active: true
     },
     {
@@ -374,7 +372,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'michaelbrown',
       confirmed: true,
-      image: 'https://example.com/michaelbrown.jpg',
       active: true
     },
     {
@@ -393,7 +390,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'carlosmartinez',
       confirmed: true,
-      image: 'https://example.com/carlosmartinez.jpg',
       active: true
     },
     {
@@ -412,7 +408,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'anafernandez5',
       confirmed: true,
-      image: 'https://example.com/anafernandez.jpg',
       active: true
     },
     {
@@ -431,7 +426,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'pedrogarcia83',
       confirmed: true,
-      image: 'https://example.com/pedrogarcia.jpg',
       active: true
     },
     {
@@ -450,7 +444,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'lauralopez1',
       confirmed: true,
-      image: 'https://example.com/lauralopez.jpg',
       active: true
     },
     {
@@ -469,7 +462,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'javierrodriguez2',
       confirmed: true,
-      image: 'https://example.com/javierrodriguez.jpg',
       active: true
     },
     {
@@ -488,7 +480,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'carmensanchez13',
       confirmed: true,
-      image: 'https://example.com/carmensanchez.jpg',
       active: true
     },
     {
@@ -507,7 +498,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'fernandotorres35',
       confirmed: true,
-      image: 'https://example.com/fernandotorres.jpg',
       active: true
     },
     {
@@ -526,7 +516,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'luismorales',
       confirmed: true,
-      image: 'https://example.com/luismorales.jpg',
       active: true
     },
     {
@@ -545,7 +534,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'sararamirez',
       confirmed: true,
-      image: 'https://example.com/sararamirez.jpg',
       active: true
     },
     {
@@ -564,7 +552,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'robertoortega',
       confirmed: true,
-      image: 'https://example.com/robertoortega.jpg',
       active: true
     },
     {
@@ -583,7 +570,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'patriciacastillo',
       confirmed: true,
-      image: 'https://example.com/patriciacastillo.jpg',
       active: true
     },
     {
@@ -602,7 +588,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'ricardoguerrero',
       confirmed: true,
-      image: 'https://example.com/ricardoguerrero.jpg',
       active: true
     },
     {
@@ -621,7 +606,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'martapena',
       confirmed: true,
-      image: 'https://example.com/martapena.jpg',
       active: true
     },
     {
@@ -640,7 +624,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'antonionavarro',
       confirmed: true,
-      image: 'https://example.com/antonionavarro.jpg',
       active: true
     },
     {
@@ -659,7 +642,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'isabelmolina',
       confirmed: true,
-      image: 'https://example.com/isabelmolina.jpg',
       active: true
     },
     {
@@ -678,7 +660,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'albertoherrera',
       confirmed: true,
-      image: 'https://example.com/albertoherrera.jpg',
       active: true
     },
     {
@@ -697,7 +678,6 @@ export default async function seed() {
       updated_at: new Date(),
       username: 'cristinadelgado',
       confirmed: true,
-      image: 'https://example.com/cristinadelgado.jpg',
       active: true
     }
   ]

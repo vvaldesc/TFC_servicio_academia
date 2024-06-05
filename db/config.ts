@@ -38,7 +38,7 @@ const Students = defineTable({
     updated_at: column.date({ optional: true }),
     username: column.text({ unique: true }),
     confirmed: column.boolean(),
-    image: column.text(),
+    image: column.text({ optional: true }),
     active: column.boolean({ default: false }),
   },
 });

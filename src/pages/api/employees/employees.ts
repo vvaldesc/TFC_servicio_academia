@@ -1,4 +1,4 @@
-import { sql, and ,db, eq, Employees, Teachers, Students, ServiceConsumption, avg, Courses, Subjects, StudentSubjectEnrolments, count, exists, countDistinct, alias, or, not } from "astro:db";
+import { sql ,db, eq, Employees, Teachers, Students, ServiceConsumption, Courses, Subjects, StudentSubjectEnrolments, countDistinct, alias } from "astro:db";
 import type { APIRoute } from "astro";
 import type { Result, Client_type } from "@/consts/types";
 
@@ -14,8 +14,8 @@ export const GET = async () => {
     student_id: Employees.student_id,
     social_security: Employees.social_security,
     salary: Employees.salary,
-    rating: avg(ServiceConsumption.rating),
-    teacher: {
+    rating: sql`ROUND(AVG(ServiceConsumption.rating))`,
+      teacher: {
       id: Teachers.id,
       is_admin: Teachers.is_admin,
       name: Teachers.name,

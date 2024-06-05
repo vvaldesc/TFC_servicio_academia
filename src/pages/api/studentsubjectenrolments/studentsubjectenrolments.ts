@@ -36,3 +36,35 @@ export const GET = async () => {
     },
   });
 };
+
+export const POST = async (request: Request) => {
+  const body = await request.request.json();
+  console.log(body);
+  body.date = new Date(body.date);
+  
+  // Assuming the body contains the necessary data for creating a new course
+
+  const enrolment = await db.insert(StudentSubjectEnrolments).values(body).onConflictDoUpdate({
+    target: StudentSubjectEnrolments.id,
+    set: body,
+  });
+
+  let status: number = 404;
+  let result: Result = {
+    data: "undefined" as string | typeof enrolment,
+    table: "StudentSubjectFaults" as string,
+    count: 0,
+  };
+
+  if (enrolment) {
+    status = 201;
+    result.data = enrolment;
+  }
+
+  return new Response(JSON.stringify({ result }), {
+    status: status,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};
