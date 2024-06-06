@@ -16,10 +16,8 @@ async function fetchIPData(ip: string) {
 
     try {
         const response = await axios.post(options.url, options.data, { headers: options.headers });
-        console.log(response.data);
         return response.data.city;
     } catch (error) {
-        console.error(error);
     }
 }
 

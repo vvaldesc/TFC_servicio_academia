@@ -29,7 +29,7 @@ export const POST = async (request: Request) => {
     };
     fetchIPData(clientAddress)
       .then(() => insertQuery(clientAddress))
-      .catch((error) => console.error("Ocurrió un error:", error));
+      .catch((error) => console.log('error'));
     return new Response(JSON.stringify({ result }), {
       status: 200,
       headers: {
@@ -37,7 +37,6 @@ export const POST = async (request: Request) => {
       },
     });
   } catch (error) {
-    console.error(error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 200,
       headers: {
