@@ -1,4 +1,4 @@
-import { db, Students } from "astro:db";
+import { db, eq, Students } from "astro:db";
 import type { APIRoute } from "astro";
 import type { Result } from "@/consts/types";
 
@@ -23,10 +23,8 @@ export const GET = async () => {
 };
 
 export const POST = async (request: Request) => {
-  const { body } = await request.json();
+  const body = await request.request.json();
   
-  // Assuming the body contains the necessary data for creating a new course
-
   const student = await db.insert(Students).values(body).onConflictDoUpdate({
     target: Students.id,
     set: body,
@@ -35,7 +33,34 @@ export const POST = async (request: Request) => {
   let status: number = 404;
   let result: Result = {
     data: "undefined" as string | typeof student,
-    table: "Teachers" as string,
+    table: "Students" as string,
+    count: 0,
+  };
+
+  if (student) {
+    status = 201;
+    result.data = student;
+  }
+
+  return new Response(JSON.stringify({ result }), {
+    status: status,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};
+
+export const PUT = async (request: Request) => {
+  const body = await request.request.json();
+  
+  const student = await db.update(Students)
+  .set(body)
+  .where(eq(body.id, Students.id));
+
+  let status: number = 404;
+  let result: Result = {
+    data: "undefined" as string | typeof student,
+    table: "Students" as string,
     count: 0,
   };
 

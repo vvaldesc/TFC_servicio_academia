@@ -1,4 +1,4 @@
-import { db, Clients } from "astro:db";
+import { db, eq, Clients } from "astro:db";
 import type { APIRoute } from "astro";
 import type { Result, Client_type } from "@/consts/types";
 
@@ -65,4 +65,31 @@ export const POST: APIRoute = async (request) => {
       },
     });
   }
+};
+
+export const PUT = async (request: Request) => {
+  const body = await request.request.json();
+  
+  const client = await db.update(Clients)
+  .set(body)
+  .where(eq(body.id, Clients.id));
+
+  let status: number = 404;
+  let result: Result = {
+    data: "undefined" as string | typeof client,
+    table: "Teachers" as string,
+    count: 0,
+  };
+
+  if (client) {
+    status = 201;
+    result.data = client;
+  }
+
+  return new Response(JSON.stringify({ result }), {
+    status: status,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
 };

@@ -107,12 +107,12 @@ export default async function seed() {
     const record = {
       service_id: Math.floor(Math.random() * 8) + 1, // Hay 8 servicios
       employee_id: employee_id, // Hay 4 profesores y 20 alumnos, total 24
-      client_id: Math.floor(Math.random() * 2) + 1, // Hay 2 clientes      rating: rating,
+      client_id: Math.floor(Math.random() * 12) + 1, // Hay 2 clientes      rating: rating,
       price: Math.round((Math.random() * 500) * 10) / 10,
       delay: delay,
       created_at: new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
       reserved_at: reserved_at,
-      state: Math.random() < 0.5 ? 'Pending' : 'Cancelled',
+      state: Math.random() < 0.8 ? 'Pending' : 'Cancelled',
       weather: weather,
       rating: isTeacher(employee_id) ? Math.floor(Math.random() * 6) + 5 : Math.floor(Math.random() * 6),
     };
@@ -148,7 +148,147 @@ export default async function seed() {
       username: 'janesmith', 
       confirmed: true, 
       active: true 
-    }
+    },
+    {
+      name: 'Carlos',
+      surname: 'González Pérez',
+      email: 'carlosgonzalezperez@gmail.com',
+      phone_number: '123456789',
+      address: '789 Pine St',
+      city: 'Chicago',
+      bornDate: new Date('1982-02-02'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'carlosgonzalez',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'María',
+      surname: 'López García',
+      email: 'marialopezgarcia@gmail.com',
+      phone_number: '987654321',
+      address: '321 Oak St',
+      city: 'San Francisco',
+      bornDate: new Date('1987-03-03'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'marialopez',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Juan',
+      surname: 'Martínez Rodríguez',
+      email: 'juanmartinezrodriguez@gmail.com',
+      phone_number: '456789123',
+      address: '654 Maple St',
+      city: 'Boston',
+      bornDate: new Date('1980-04-04'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'juanmartinez',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Ana',
+      surname: 'Fernández Morales',
+      email: 'anafernandezmorales@gmail.com',
+      phone_number: '789123456',
+      address: '987 Walnut St',
+      city: 'Seattle',
+      bornDate: new Date('1985-05-05'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'anafernandez',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Pedro',
+      surname: 'Torres Herrera',
+      email: 'pedrotorresherrera@gmail.com',
+      phone_number: '321654987',
+      address: '564 Birch St',
+      city: 'Austin',
+      bornDate: new Date('1983-06-06'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'pedrotorres',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Luis',
+      surname: 'García Sánchez',
+      email: 'luisgarciasanchez@gmail.com',
+      phone_number: '654321789',
+      address: '123 Cherry St',
+      city: 'Houston',
+      bornDate: new Date('1984-07-07'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'luisgarcia',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Carmen',
+      surname: 'Gómez López',
+      email: 'carmengomezlopez@gmail.com',
+      phone_number: '789654123',
+      address: '321 Apple St',
+      city: 'Phoenix',
+      bornDate: new Date('1986-08-08'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'carmengomez',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Francisco',
+      surname: 'Romero Torres',
+      email: 'franciscoromerotorres@gmail.com',
+      phone_number: '123654789',
+      address: '654 Peach St',
+      city: 'Philadelphia',
+      bornDate: new Date('1982-09-09'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'franciscoromero',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Isabel',
+      surname: 'Navarro Guzmán',
+      email: 'isabelnavarroguzman@gmail.com',
+      phone_number: '987321654',
+      address: '987 Pear St',
+      city: 'San Antonio',
+      bornDate: new Date('1983-10-10'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'isabelnavarro',
+      confirmed: true,
+      active: true,
+    },
+    {
+      name: 'Javier',
+      surname: 'Moreno Méndez',
+      email: 'javiermorenomendez@gmail.com',
+      phone_number: '456987321',
+      address: '321 Plum St',
+      city: 'San Diego',
+      bornDate: new Date('1981-11-11'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      username: 'javiermoreno',
+      confirmed: true,
+      active: true,
+    },
   ]);
   console.log('Clients inserted');
 
@@ -171,56 +311,48 @@ export default async function seed() {
         price: 20,
         description: 'Revitaliza tu piel con nuestro tratamiento facial.',
         discipline: 'Estética',
-        image: 'https://example.com/facial.jpg',
     },
     {
         name: 'Manicura',
         price: 10,
         description: 'Obtén una manicura profesional.',
         discipline: 'Estética',
-        image: 'https://example.com/manicure.jpg',
     },
     {
         name: 'Pedicura',
         price: 15,
         description: 'Consiente tus pies con nuestro servicio de pedicura.',
         discipline: 'Estética',
-        image: 'https://example.com/pedicure.jpg',
     },
     {
         name: 'Exfoliación Corporal',
         price: 20,
         description: 'Exfolia y renueva tu piel con una exfoliación corporal.',
         discipline: 'Estética',
-        image: 'https://example.com/bodyscrub.jpg',
     },
     {
         name: 'Corte de Pelo',
         price: 5,
         description: 'Obtén un corte de pelo con estilo de nuestros estilistas profesionales.',
         discipline: 'Peluquería',
-        image: 'https://example.com/haircut.jpg',
     },
     {
         name: 'Coloración de Pelo',
         price: 20,
         description: 'Añade color a tu cabello con nuestro servicio de coloración.',
         discipline: 'Peluquería',
-        image: 'https://example.com/haircoloring.jpg',
     },
     {
         name: 'Peinado',
         price: 20,
         description: 'Consigue el peinado perfecto para cualquier ocasión.',
         discipline: 'Peluquería',
-        image: 'https://example.com/hairstyling.jpg',
     },
     {
         name: 'Tratamiento de Keratina',
         price: 30,
         description: 'Alisa y fortalece tu cabello con un tratamiento de keratina.',
         discipline: 'Peluquería',
-        image: 'https://example.com/keratin.jpg',
     },
   ]);
   console.log('Services inserted');
@@ -826,9 +958,9 @@ export default async function seed() {
     // Prepare teachers
     const teachers = [
         { teacher_id: 1, social_security: "123456789" },
-        { teacher_id: 2, social_security: "987654321", salary: 6000 },
-        { teacher_id: 3, social_security: "111111111", salary: 5500 },
-        { teacher_id: 4, social_security: "222222222", salary: 5200 }
+        { teacher_id: 2, social_security: "987654321", salary: 1200 },
+        { teacher_id: 3, social_security: "111111111", salary: 1600 },
+        { teacher_id: 4, social_security: "222222222", salary: 1400 }
     ];
     // Add teachers to employees array
     employees.push(...teachers);
@@ -871,7 +1003,7 @@ export default async function seed() {
 
     // Para cada empleado y para cada fecha, inserta un registro
     for (let employee_id = 2; employee_id <= 4; employee_id++) {
-      let amount = Math.floor(100 + Math.random() * 1100); // Genera un salario aleatorio de 3 cifras
+      let amount = Math.floor(100 + Math.random() * 1800); // Genera un salario aleatorio de 3 cifras
 
       for (const month of months) {
         await db.insert(EmployeePayrolls).values([

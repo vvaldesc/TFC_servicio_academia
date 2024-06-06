@@ -28,8 +28,6 @@ export const POST: APIRoute = async () => {
       const employeepayrolls = await db.select().from(EmployeePayrolls);
       const employees = await db.select().from(Employees);
 
-
-
       let querys = [];
       console.log({'querys': querys.length});
 
