@@ -1,8 +1,8 @@
-import { db, Clients,Students,Teachers , eq,sql } from "astro:db";
+import { db, sql } from "astro:db";
 //import { sql } from 'drizzle-orm' 
 
 import type { APIRoute } from "astro";
-import type { Result, SqlProfileByEmail } from "@/consts/types";
+import type { Result } from "@/consts/types";
 
 export const GET: APIRoute = async ({ params }) => {
 	const {email} = params
@@ -16,7 +16,9 @@ export const GET: APIRoute = async ({ params }) => {
 `;
   //@ts-ignore
   const sqlResult: Data = await db.run(query) as Data;
-  const data = {id: sqlResult.rows[0][0], tableName: sqlResult.rows[0][1]};
+  console.log(sqlResult)
+
+  const data = {id: sqlResult.rows[0].id, tableName: sqlResult.rows[0].tableName};
 
   let status: number = 404;
   let result: Result = {

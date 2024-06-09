@@ -1,10 +1,8 @@
 import { db, Clients, StudentSubjectMensuality,
    EmployeePayrolls, Teachers, Students,
-    Subjects, Employees, Services, Articles,
+    Subjects, Employees, Services,
      Servers, Disciplines, Courses,
-      ClientTeacherTexts, ServiceConsumption,
-       ClientServerConnections, StudentSubjectEnrolments,
-        StudentSubjectFaults, ClientArticleInteractions } from 'astro:db';
+      ServiceConsumption, StudentSubjectEnrolments } from 'astro:db';
 import { Weather } from '../src/consts/types';
 
 export default async function seed() {
@@ -25,8 +23,7 @@ export default async function seed() {
       bornDate: new Date('1980-01-01'), 
       created_at: new Date(), 
       updated_at: new Date(), 
-      username: 'johnsmith', 
-      confirmed: true, 
+      username: 'johnsmith',  
       image: 'https://static.diariofemenino.com/media/13502/carta-gracias-profesor.jpg', 
       active: true,
       is_admin: true
@@ -42,8 +39,7 @@ export default async function seed() {
       bornDate: new Date('1975-01-01'), 
       created_at: new Date(), 
       updated_at: new Date(), 
-      username: 'emilyjohnson', 
-      confirmed: true, 
+      username: 'emilyjohnson',  
       image: 'https://static9.depositphotos.com/1070812/1091/i/450/depositphotos_10916856-stock-photo-teacher-on-background-of-blackboard.jpg', 
       active: true
     },
@@ -58,8 +54,7 @@ export default async function seed() {
       bornDate: new Date('1970-01-01'), 
       created_at: new Date(), 
       updated_at: new Date(), 
-      username: 'michaelbrown', 
-      confirmed: true, 
+      username: 'michaelbrown',  
       image: 'https://th.bing.com/th/id/R.636fe924035c8adfacdc45693c21db94?rik=3s8CyZiJBqaDbw&pid=ImgRaw&r=0', 
       active: true 
     },
@@ -74,8 +69,7 @@ export default async function seed() {
       bornDate: new Date('1965-01-01'), 
       created_at: new Date(), 
       updated_at: new Date(), 
-      username: 'sarahdavis', 
-      confirmed: true, 
+      username: 'sarahdavis',  
       image: 'https://th.bing.com/th/id/R.a82f5839edfe663ed6de9962565373bc?rik=QtmuPebfhMAVfA&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2016%2f03%2f01%2f304194-face-women-portrait.jpg&ehk=eyuWeJvwcHdgi1YNycX2f0pF4PvajRD1sv5AVAP2Qlw%3d&risl=&pid=ImgRaw&r=0', 
       active: true 
     },
@@ -87,7 +81,7 @@ export default async function seed() {
   }
 
   const serviceConsumptionRecords = [];
-  for (let i = 0; i < 300; i++) {
+  for (let i = 0; i < 900; i++) {
     const weather = Math.random() < 0.33 ? Weather.Snowy : (Math.random() < 0.5 ? Weather.Sunny : Weather.Cloudy);
     const delay = weather === Weather.Snowy ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20);
 
@@ -108,7 +102,7 @@ export default async function seed() {
       service_id: Math.floor(Math.random() * 8) + 1, // Hay 8 servicios
       employee_id: employee_id, // Hay 4 profesores y 20 alumnos, total 24
       client_id: Math.floor(Math.random() * 12) + 1, // Hay 2 clientes      rating: rating,
-      price: Math.round((Math.random() * 500) * 10) / 10,
+      price: Math.round((Math.random() * (30 - 7) + 7) * 10) / 10,
       delay: delay,
       created_at: new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
       reserved_at: reserved_at,
@@ -132,7 +126,6 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'johndoedd', 
-      confirmed: true, 
       active: true,
     },
     { 
@@ -146,7 +139,6 @@ export default async function seed() {
       created_at: new Date(), 
       updated_at: new Date(), 
       username: 'janesmith', 
-      confirmed: true, 
       active: true 
     },
     {
@@ -160,7 +152,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'carlosgonzalez',
-      confirmed: true,
       active: true,
     },
     {
@@ -174,7 +165,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'marialopez',
-      confirmed: true,
       active: true,
     },
     {
@@ -188,7 +178,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'juanmartinez',
-      confirmed: true,
       active: true,
     },
     {
@@ -202,7 +191,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'anafernandez',
-      confirmed: true,
       active: true,
     },
     {
@@ -216,7 +204,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'pedrotorres',
-      confirmed: true,
       active: true,
     },
     {
@@ -230,7 +217,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'luisgarcia',
-      confirmed: true,
       active: true,
     },
     {
@@ -244,7 +230,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'carmengomez',
-      confirmed: true,
       active: true,
     },
     {
@@ -258,7 +243,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'franciscoromero',
-      confirmed: true,
       active: true,
     },
     {
@@ -272,7 +256,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'isabelnavarro',
-      confirmed: true,
       active: true,
     },
     {
@@ -286,7 +269,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'javiermoreno',
-      confirmed: true,
       active: true,
     },
   ]);
@@ -357,100 +339,6 @@ export default async function seed() {
   ]);
   console.log('Services inserted');
 
-  await db.insert(Articles).values([
-    {
-      serial_number: 'A123',
-      name: 'T-Shirt',
-      price: 20,
-      color: 'Blue',
-      description: 'Comfortable cotton t-shirt.',
-      type: 'Clothing',
-      volume: 0.1,
-      weight: 0.2,
-      IVA: 0.21,
-      gross_price: 24.2,
-      supplier: 'ABC Clothing',
-      stock: 100,
-      image1: 'https://example.com/tshirt.jpg',
-      image2: 'https://example.com/tshirt-back.jpg',
-      image3: 'https://example.com/tshirt-side.jpg',
-      image4: 'https://example.com/tshirt-closeup.jpg',
-    },
-    {
-      serial_number: 'B456',
-      name: 'Running Shoes',
-      price: 80,
-      color: 'Black',
-      description: 'High-performance running shoes.',
-      type: 'Footwear',
-      volume: 0.2,
-      weight: 0.5,
-      IVA: 0.21,
-      gross_price: 96.8,
-      supplier: 'XYZ Sports',
-      stock: 50,
-      image1: 'https://example.com/shoes.jpg',
-      image2: 'https://example.com/shoes-side.jpg',
-      image3: 'https://example.com/shoes-top.jpg',
-      image4: 'https://example.com/shoes-bottom.jpg',
-    },
-    {
-      serial_number: 'C789',
-      name: 'Yoga Mat',
-      price: 30,
-      color: 'Purple',
-      description: 'Non-slip yoga mat.',
-      type: 'Equipment',
-      volume: 0.3,
-      weight: 1.0,
-      IVA: 0.21,
-      gross_price: 36.3,
-      supplier: '123 Fitness',
-      stock: 20,
-      image1: 'https://example.com/yogamat.jpg',
-      image2: 'https://example.com/yogamat-closeup.jpg',
-      image3: 'https://example.com/yogamat-rolled.jpg',
-      image4: 'https://example.com/yogamat-studio.jpg',
-    },
-    {
-      serial_number: 'D012',
-      name: 'Dumbbells',
-      price: 50,
-      color: 'Silver',
-      description: 'Set of adjustable dumbbells.',
-      type: 'Equipment',
-      volume: 0.5,
-      weight: 5.0,
-      IVA: 0.21,
-      gross_price: 60.5,
-      supplier: '456 Fitness',
-      stock: 10,
-      image1: 'https://example.com/dumbbells.jpg',
-      image2: 'https://example.com/dumbbells-closeup.jpg',
-      image3: 'https://example.com/dumbbells-side.jpg',
-      image4: 'https://example.com/dumbbells-gym.jpg',
-    },
-    {
-      serial_number: 'E345',
-      name: 'Protein Powder',
-      price: 40,
-      color: 'White',
-      description: 'High-quality protein powder.',
-      type: 'Supplement',
-      volume: 0.3,
-      weight: 0.5,
-      IVA: 0.21,
-      gross_price: 48.4,
-      supplier: '789 Nutrition',
-      stock: 30,
-      image1: 'https://example.com/protein.jpg',
-      image2: 'https://example.com/protein-nutrition.jpg',
-      image3: 'https://example.com/protein-shaker.jpg',
-      image4: 'https://example.com/protein-scoop.jpg',
-    },
-  ]);
-  console.log('Articles inserted');
-
   const students = [
     {
       matriculation_number: '001',
@@ -467,7 +355,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'juanperez',
-      confirmed: true,
       active: true
     },
     {
@@ -485,7 +372,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'mariagomez',
-      confirmed: true,
       active: true
     },
     {
@@ -503,7 +389,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'michaelbrown',
-      confirmed: true,
       active: true
     },
     {
@@ -521,7 +406,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'carlosmartinez',
-      confirmed: true,
       active: true
     },
     {
@@ -539,7 +423,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'anafernandez5',
-      confirmed: true,
       active: true
     },
     {
@@ -557,7 +440,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'pedrogarcia83',
-      confirmed: true,
       active: true
     },
     {
@@ -575,7 +457,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'lauralopez1',
-      confirmed: true,
       active: true
     },
     {
@@ -593,7 +474,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'javierrodriguez2',
-      confirmed: true,
       active: true
     },
     {
@@ -611,7 +491,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'carmensanchez13',
-      confirmed: true,
       active: true
     },
     {
@@ -629,7 +508,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'fernandotorres35',
-      confirmed: true,
       active: true
     },
     {
@@ -647,7 +525,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'luismorales',
-      confirmed: true,
       active: true
     },
     {
@@ -665,7 +542,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'sararamirez',
-      confirmed: true,
       active: true
     },
     {
@@ -683,7 +559,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'robertoortega',
-      confirmed: true,
       active: true
     },
     {
@@ -701,7 +576,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'patriciacastillo',
-      confirmed: true,
       active: true
     },
     {
@@ -719,7 +593,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'ricardoguerrero',
-      confirmed: true,
       active: true
     },
     {
@@ -737,7 +610,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'martapena',
-      confirmed: true,
       active: true
     },
     {
@@ -755,7 +627,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'antonionavarro',
-      confirmed: true,
       active: true
     },
     {
@@ -773,7 +644,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'isabelmolina',
-      confirmed: true,
       active: true
     },
     {
@@ -791,7 +661,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'albertoherrera',
-      confirmed: true,
       active: true
     },
     {
@@ -809,7 +678,6 @@ export default async function seed() {
       created_at: new Date(),
       updated_at: new Date(),
       username: 'cristinadelgado',
-      confirmed: true,
       active: true
     }
   ]
@@ -984,7 +852,6 @@ export default async function seed() {
       nickname: 'server1',
       IP: 'localhost',
       Port: 4321,
-      id: 1,
     }
   ]);
   console.log('Servers inserted');
@@ -1024,50 +891,6 @@ export default async function seed() {
   EmployeePayrollsGenerator();
   console.log('EmployeePayrolls inserted');
 
-  await db.insert(ClientTeacherTexts).values([
-    {
-      client_id: 1,
-      teacher_id: 1,
-      sent_from_client: true,
-      sent_from_teacher: false,
-      message: "Hola, ¿cómo estás?",
-      date: new Date(),
-    },
-    {
-      client_id: 2,
-      teacher_id: 2,
-      sent_from_client: false,
-      sent_from_teacher: true,
-      message: "Estoy bien, gracias.",
-      date: new Date(),
-    },
-    {
-      client_id: 1,
-      teacher_id: 3,
-      sent_from_client: true,
-      sent_from_teacher: false,
-      message: "¿Podemos programar una reunión?",
-      date: new Date(),
-    },
-    {
-      client_id: 1,
-      teacher_id: 4,
-      sent_from_client: false,
-      sent_from_teacher: true,
-      message: "Claro, ¿qué tal el viernes?",
-      date: new Date(),
-    },
-    {
-      client_id: 1,
-      teacher_id: 4,
-      sent_from_client: true,
-      sent_from_teacher: false,
-      message: "Perfecto, nos vemos el viernes.",
-      date: new Date(),
-    },
-  ]);
-  console.log('ClientTeacherTexts inserted');
-
   await db.insert(ServiceConsumption).values(serviceConsumptionRecords);
   console.log('ServiceConsumption inserted');
 
@@ -1086,65 +909,6 @@ export default async function seed() {
   
   await db.insert(StudentSubjectEnrolments).values(enrolments);
   console.log('StudentSubjectEnrolments inserted');
-
-  await db.insert(ClientArticleInteractions).values([
-    {
-      client_id: 1,
-      serial_number: 'A123',
-      interaction_type: 'booking',
-      date: new Date(),
-      updated_at: new Date(),
-      discount: 10,
-      pickedup_date: null,
-      pickingup_date: null,
-      price: 18,
-    },
-    {
-      client_id: 2,
-      serial_number: 'B456',
-      interaction_type: 'pickup',
-      date: new Date(),
-      updated_at: new Date(),
-      discount: null,
-      pickedup_date: new Date(),
-      pickingup_date: new Date(),
-      price: null,
-    },
-    {
-      client_id: 1,
-      serial_number: 'C789',
-      interaction_type: 'booking',
-      date: new Date(),
-      updated_at: new Date(),
-      discount: 5,
-      pickedup_date: null,
-      pickingup_date: null,
-      price: 28,
-    },
-    {
-      client_id: 1,
-      serial_number: 'D012',
-      interaction_type: 'pickup',
-      date: new Date(),
-      updated_at: new Date(),
-      discount: null,
-      pickedup_date: new Date(),
-      pickingup_date: new Date(),
-      price: null,
-    },
-    {
-      client_id: 2,
-      serial_number: 'E345',
-      interaction_type: 'booking',
-      date: new Date(),
-      updated_at: new Date(),
-      discount: 15,
-      pickedup_date: null,
-      pickingup_date: null,
-      price: 34,
-    },
-  ]);
-  console.log('ClientArticleInteractions inserted');
 
 
 

@@ -10,6 +10,7 @@ console.log(port);
 console.log("Cron Job is running...");
 
 export const scheduleUpdateDetails = async () => {
+  const firstTime = true;
   cron.schedule("* * * * *", () => {
     console.log("cron tick");
     const date = new Date();
@@ -17,12 +18,14 @@ export const scheduleUpdateDetails = async () => {
       console.log("update services details");
       const body = {
         cronUpdate: true,
+        firstTime: firstTime,
       };
       console.log(`${url}:${port}/api/serviceConsumptions/serviceConsumptions`);
       axios
         .put(`${url}:${port}/api/serviceConsumptions/serviceConsumptions`, body)
         .then((response) => {
           console.log(response.data);
+          firstTime = false;
         })
         .catch((error) => {
           console.log(error);

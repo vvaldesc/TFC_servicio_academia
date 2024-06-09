@@ -170,14 +170,59 @@ export const PUT: APIRoute = async (request) => {
 
     let response;
     if (updateParams.cronUpdate) {
+
+      console.log({'updateParams':updateParams});
+
+      
+      if (updateParams.firstTime === false ){
+
+        const recievers = await db.select().from(ServiceConsumption)
+        .innerJoin(Clients, eq(ServiceConsumption.client_id, Clients.id))
+        .where(
+          and(
+            lt(ServiceConsumption.reserved_at, datesISO_check as Date),
+            eq(ServiceConsumption.state, 'Pending')
+        ));
+
+        console.log(recievers);
+
+        recievers.map(async (reciever: any) => {
+              
+            const mailParamsCliente: mailParams = {
+              price: reciever.ServiceConsumption.price,
+              reserved_at: reciever.ServiceConsumption.reserved_at,
+              message: `Buenas ${reciever.Clients.name} su cita ha terminado, le gustaría dejar una reseña?`,
+              subject: 'Deja tu reseña',
+              client_name: reciever.Clients.name,
+              client_email: reciever.Clients.email,
+              receptor_email: reciever.Clients.email,
+              ServiceConsumption_id: reciever.ServiceConsumption.id,
+              feedback: true,
+            };
+      
+            console.log(mailParamsCliente);
+      
+            mailer(mailParamsCliente);
+        });
+
+        console.log({'recievers':recievers});
+
+      }
+
+
       response = await db.update(ServiceConsumption)
       .set({state: 'Completed',updated_at: dateISO as Date})
       .where(
         and(
           lt(ServiceConsumption.reserved_at, datesISO_check as Date),
-          not(eq(ServiceConsumption.state, 'Completed'))
+          eq(ServiceConsumption.state, 'Pending')
         )
       );
+
+
+
+
+
     } else if (updateParams.id) {
       console.log({'updateParams':updateParams});
       response = await db.update(ServiceConsumption)

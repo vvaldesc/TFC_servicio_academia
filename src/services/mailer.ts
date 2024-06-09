@@ -27,11 +27,14 @@ export default async function mailer(mailParams: mailParams): Promise<Result> {
           <h2 style="color: #b43e8f;">Hola,</h2>
           <p>${mailParams.message}</p>
           <div style="margin: 20px 0;">
-              <a href="${HOST}/profile" style="background-color: #b43e8f; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Mira tus reservas</a>
+              <a href="${HOST}profile" style="background-color: #b43e8f; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Mira tus reservas</a>
           </div>
+          ${mailParams.feedback ? `<div>
+              <a href="${HOST}feedback/${mailParams.ServiceConsumption_id}" style="background-color: #b43e8f; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Deja una reseña</a>
+          </div>` : ''}
           <p>Si tienes algún problema, no dudes en contactar con nosotros:</p>
           <div>
-              <a href="${HOST}/courses" style="background-color: #b43e8f; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Contacta con el admin</a>
+              <a href="${HOST}courses" style="background-color: #b43e8f; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Contacta con el admin</a>
           </div>
           <p style="color: #999; font-size: 0.8em;">Gracias por usar nuestro servicio.</p>
       </div>

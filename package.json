@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "scripts": {
     "all": "run-p dev cron",
+    "allver": "run-p dev cron --verbose",
     "allre": "run-p devre cron",
+    "allrever": "run-p devre cron --verbose",
     "dev": "astro dev",
     "devre": "astro dev --remote",
     "start": "astro dev",
@@ -15,7 +17,8 @@
   },
   "dependencies": {
     "@astrojs/check": "0.7.0",
-    "@astrojs/db": "0.11.4",
+    "@astrojs/db": "^0.11.4",
+    "@astrojs/web-vitals": "^0.2.1",
     "@typescript-eslint/eslint-plugin": "^7.12.0",
     "@typescript-eslint/parser": "^7.12.0",
     "astro": "4.9.1",

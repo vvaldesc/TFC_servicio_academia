@@ -13,7 +13,6 @@ const Clients = defineTable({
     created_at: column.date({ optional: true }),
     updated_at: column.date({ optional: true }),
     username: column.text({ unique: true, optional: true }),
-    confirmed: column.boolean({ default: false }),
     image: column.text({ optional: true }),
     active: column.boolean({ default: false }),
   },
@@ -37,7 +36,6 @@ const Students = defineTable({
     created_at: column.date(),
     updated_at: column.date({ optional: true }),
     username: column.text({ unique: true }),
-    confirmed: column.boolean(),
     image: column.text({ optional: true }),
     active: column.boolean({ default: false }),
   },
@@ -58,7 +56,6 @@ const Teachers = defineTable({
     created_at: column.date(),
     updated_at: column.date({ optional: true }),
     username: column.text({ unique: true }),
-    confirmed: column.boolean(),
     image: column.text(),
     active: column.boolean({ default: false }),
   },
@@ -122,44 +119,11 @@ const Services = defineTable({
   },
 });
 
-const Articles = defineTable({
-  columns: {
-    serial_number: column.text({ primaryKey: true }),
-    name: column.text({ unique: true }),
-    price: column.number(),
-    color: column.text(),
-    description: column.text({ optional: true }),
-    type: column.text({ optional: true }),
-    volume: column.number({ optional: true }),
-    weight: column.number({ optional: true }),
-    IVA: column.number(),
-    gross_price: column.number(),
-    supplier: column.text({ optional: true }),
-    stock: column.number(),
-    image1: column.text(),
-    image2: column.text({ optional: true }),
-    image3: column.text({ optional: true }),
-    image4: column.text({ optional: true }),
-  },
-});
-
 const Servers = defineTable({
   columns: {
     nickname: column.text({ primaryKey: true }),
     IP: column.text(),
     Port: column.number(),
-  },
-});
-
-const ClientTeacherTexts = defineTable({
-  columns: {
-    id: column.number({ primaryKey: true, autoIncrement: true }),
-    client_id: column.number({ references: () => Clients.columns.id }),
-    teacher_id: column.number({ references: () => Teachers.columns.id }),
-    sent_from_client: column.boolean(),
-    sent_from_teacher: column.boolean(),
-    message: column.text(),
-    date: column.date()
   },
 });
 
@@ -184,6 +148,7 @@ const ClientServerConnections = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
     server_nick: column.text({ references: () => Servers.columns.nickname }),
+    client_id: column.number({ references: () => Clients.columns.id }),
     estimated_client_location: column.text({ optional: true }),
     device_type: column.text({ optional: true }),
     file_download: column.text({ optional: true }),
@@ -222,27 +187,13 @@ const StudentSubjectFaults = defineTable({
   },
 });
 
-const ClientArticleInteractions = defineTable({
-  columns: {
-    serial_number: column.text({ primaryKey: true, references: () => Articles.columns.serial_number }),
-    client_id: column.number({ references: () => Clients.columns.id }),
-    interaction_type: column.text(), // 'booking' or 'pickup'
-    date: column.date(),
-    updated_at: column.date({ optional: true }),
-    discount: column.number({ optional: true }),
-    pickedup_date: column.date({ optional: true }),
-    pickingup_date: column.date({ optional: true }),
-    price: column.number({ optional: true }),
-  },
-});
-
 // https://astro.build/db/config
 // prettier-ignore
 export default defineDb({
   tables:
-   {Clients, Students, Employees, Services, Teachers, Subjects, Articles,
+   {Clients, Students, Employees, Services, Teachers, Subjects,
     Servers, Courses, Disciplines,
-    ClientTeacherTexts, ServiceConsumption, ClientServerConnections,
-    StudentSubjectEnrolments, StudentSubjectFaults, ClientArticleInteractions,
+    ServiceConsumption, ClientServerConnections,
+    StudentSubjectEnrolments, StudentSubjectFaults,
     EmployeePayrolls, StudentSubjectMensuality}
 });

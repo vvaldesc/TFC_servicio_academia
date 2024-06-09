@@ -15,6 +15,7 @@ export interface mailParams {
   client_email?: string;
   receptor_email?: string;
   feedback?: boolean;
+  ServiceConsumption_id: number;
 }
 
 
