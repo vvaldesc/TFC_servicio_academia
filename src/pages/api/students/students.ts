@@ -24,15 +24,20 @@ export const GET = async () => {
 
 export const POST = async (request: Request) => {
   const body = await request.request.json();
+
+  body.created_at = new Date();
+  body.updated_at = new Date();
+  body.bornDate && (body.bornDate = new Date(body.bornDate));
   
   const student = await db.insert(Students).values(body).onConflictDoUpdate({
     target: Students.id,
     set: body,
   });
 
+
   let status: number = 404;
   let result: Result = {
-    data: "undefined" as string | typeof student,
+    data: student as string | typeof student,
     table: "Students" as string,
     count: 0,
   };

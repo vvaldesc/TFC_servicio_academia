@@ -112,26 +112,20 @@ export const GET = async () => {
 
 export const POST: APIRoute = async (request) => {
   let result: Result = {
-    data: "undefined" as string | Client_type,
+    data: "undefined" as string | any,
     table: "Employees" as string,
     count: 0,
   };
   let status: number = 404;
   try {
-    const employees: Client_type = await request.request.json();
-    //@ts-ignore
-    employees.bornDate = new Date(client.bornDate);
-    //@ts-ignore
-    employees.created_at = new Date();
-    //@ts-ignore
-    employees.updated_at = new Date();
+    const employees: any = await request.request.json();
+    console.log('employees');
     console.log(employees);
     const response = await db.insert(Employees).values(employees).onConflictDoUpdate({
       target: Employees.id,
       set: employees,
     });
     //@ts-ignore
-    client.id = String(response.lastInsertRowid);
 
     if (employees) {
       status = 201;
@@ -145,6 +139,7 @@ export const POST: APIRoute = async (request) => {
       },
     });
   } catch (error) {
+    console.error(error);
     //@ts-ignore
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,

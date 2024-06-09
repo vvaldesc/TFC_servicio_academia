@@ -73,12 +73,15 @@ export const POST: APIRoute = async (request) => {
   };
   let status: number = 404;
   try {
-    const serviceConsumptions: ServiceConsumption_type = await request.request.json();
-    console.log({'serviceConsumptions':serviceConsumptions});
+    const serviceConsumptions: ServiceConsumption_type | any = await request.request.json();
 
     const dateActual = new Date();
     dateActual.setHours(dateActual.getHours() + 2);
-    console.log({'dateActual':dateActual});
+
+    if (!serviceConsumptions.price) {
+      const services = await db.select().from(Services).where(eq(Services.id, serviceConsumptions.service_id));
+      serviceConsumptions.price = services[0].price;
+    }
 
     //@ts-ignore
     serviceConsumptions.created_at = dateActual;
@@ -94,45 +97,45 @@ export const POST: APIRoute = async (request) => {
     //@ts-ignore
     // serviceConsumptions.id = String(response.columns);
 
-    console.log({'response': response});
-
     if (response) {
       status = 201;
       result.data = response;
       result.table= "ServiceConsumption";
       result.count = 1;
 
-      const mailParamsCliente: mailParams = {
-        price: serviceConsumptions.price,
-        reserved_at: serviceConsumptions.reserved_at,
-        message: `Buenas ${serviceConsumptions.client_name} su cita con ${serviceConsumptions.employee_name} para ${serviceConsumptions.service_name} ha sido reservada para el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
-        subject: 'Tu reserva ha sido realizada con éxito',
-        employee_name: serviceConsumptions.employee_name,
-        employee_mail: serviceConsumptions.employee_mail,
-        client_name: serviceConsumptions.client_email,
-        client_email: serviceConsumptions.client_name,
-        receptor_email: serviceConsumptions.client_email,
-        feedback: true,
-      };
-
-      const mailParamsEployee: mailParams = {
-        price: serviceConsumptions.price,
-        reserved_at: serviceConsumptions.reserved_at,
-        message: `Buenas ${serviceConsumptions.employee_name} tiene cita para ${serviceConsumptions.service_name} con ${serviceConsumptions.client_name} el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
-        subject: 'Tienes una nueva cita',
-        employee_name: serviceConsumptions.employee_name,
-        employee_mail: serviceConsumptions.employee_mail,
-        client_name: serviceConsumptions.client_email,
-        client_email: serviceConsumptions.client_name,
-        receptor_email: serviceConsumptions.employee_mail,
-        feedback: true,
-      };
-
-      console.log(mailParamsCliente);
-      console.log(mailParamsEployee);
-
-      mailer(mailParamsCliente);
-      mailer(mailParamsEployee);
+      if (serviceConsumptions.mode !== 'Silent'){
+        const mailParamsCliente: mailParams = {
+          price: serviceConsumptions.price,
+          reserved_at: serviceConsumptions.reserved_at,
+          message: `Buenas ${serviceConsumptions.client_name} su cita con ${serviceConsumptions.employee_name} para ${serviceConsumptions.service_name} ha sido reservada para el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
+          subject: 'Tu reserva ha sido realizada con éxito',
+          employee_name: serviceConsumptions.employee_name,
+          employee_mail: serviceConsumptions.employee_mail,
+          client_name: serviceConsumptions.client_email,
+          client_email: serviceConsumptions.client_name,
+          receptor_email: serviceConsumptions.client_email,
+          feedback: true,
+        };
+  
+        const mailParamsEployee: mailParams = {
+          price: serviceConsumptions.price,
+          reserved_at: serviceConsumptions.reserved_at,
+          message: `Buenas ${serviceConsumptions.employee_name} tiene cita para ${serviceConsumptions.service_name} con ${serviceConsumptions.client_name} el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
+          subject: 'Tienes una nueva cita',
+          employee_name: serviceConsumptions.employee_name,
+          employee_mail: serviceConsumptions.employee_mail,
+          client_name: serviceConsumptions.client_email,
+          client_email: serviceConsumptions.client_name,
+          receptor_email: serviceConsumptions.employee_mail,
+          feedback: true,
+        };
+  
+        console.log(mailParamsCliente);
+        console.log(mailParamsEployee);
+  
+        mailer(mailParamsCliente);
+        mailer(mailParamsEployee);
+      }
     }
 
     return new Response(JSON.stringify({ result }), {
@@ -142,6 +145,7 @@ export const POST: APIRoute = async (request) => {
       },
     });
   } catch (error) {
+    console.log({'error':error});
     //@ts-ignore
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
@@ -160,7 +164,7 @@ export const PUT: APIRoute = async (request) => {
   };
   let status: number = 404;
   try {
-    const updateParams: any = await request.request.json();
+    const updateParams: ServiceConsumption_type | any = await request.request.json();
 
     let dateISO = new Date();
     dateISO.setHours(dateISO.getHours() + 2);
@@ -168,12 +172,12 @@ export const PUT: APIRoute = async (request) => {
     let datesISO_check = new Date(dateISO.getTime());
     datesISO_check.setMinutes(datesISO_check.getMinutes() - 30);
 
+    console.log('updateParams')
+    console.log(updateParams)
+
     let response;
-    if (updateParams.cronUpdate) {
-
+    if (updateParams.id && updateParams.cronUpdate) {
       console.log({'updateParams':updateParams});
-
-      
       if (updateParams.firstTime === false ){
 
         const recievers = await db.select().from(ServiceConsumption)
@@ -209,7 +213,6 @@ export const PUT: APIRoute = async (request) => {
 
       }
 
-
       response = await db.update(ServiceConsumption)
       .set({state: 'Completed',updated_at: dateISO as Date})
       .where(
@@ -219,11 +222,7 @@ export const PUT: APIRoute = async (request) => {
         )
       );
 
-
-
-
-
-    } else if (updateParams.id) {
+    } else if (updateParams.id && updateParams.state === "Cancelled" && updateParams.mode !== "Silent") {
       console.log({'updateParams':updateParams});
       response = await db.update(ServiceConsumption)
       .set({state: updateParams.state, updated_at: dateISO as Date})
@@ -262,7 +261,17 @@ export const PUT: APIRoute = async (request) => {
 
       mailer(mailParamsCliente);
       mailer(mailParamsEployee);
+    } else if (updateParams.id && updateParams.mode === "Silent") {
+
+      updateParams.created_at && (updateParams.created_at = new Date(updateParams.created_at));
+      updateParams.updated_at && (updateParams.updated_at = new Date(updateParams.updated_at));
+      updateParams.reserved_at && (updateParams.reserved_at = new Date(updateParams.reserved_at));
+
+      response = await db.update(ServiceConsumption)
+      .set(updateParams)
+      .where(eq(ServiceConsumption.id, updateParams.id));
     }
+
 
     if (response) {
       status = 200;
