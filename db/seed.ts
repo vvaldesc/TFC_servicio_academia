@@ -41,7 +41,9 @@ export default async function seed() {
       updated_at: new Date(), 
       username: 'emilyjohnson',  
       image: 'https://static9.depositphotos.com/1070812/1091/i/450/depositphotos_10916856-stock-photo-teacher-on-background-of-blackboard.jpg', 
-      active: true
+      active: true,
+      is_admin: true
+      
     },
     { 
       id: 3,

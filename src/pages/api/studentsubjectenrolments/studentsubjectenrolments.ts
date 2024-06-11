@@ -40,7 +40,8 @@ export const GET = async () => {
 export const POST = async (request: Request) => {
   const body = await request.request.json();
   console.log(body);
-  body.date = new Date(body.date);
+
+  body.enrolled_at = new Date();
   
   // Assuming the body contains the necessary data for creating a new course
 
