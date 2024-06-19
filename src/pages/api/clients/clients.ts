@@ -68,6 +68,7 @@ export const POST: APIRoute = async (request) => {
 };
 
 export const PUT = async (request: Request) => {
+  //@ts-ignore
   const body = await request.request.json();
   
   const client = await db.update(Clients)

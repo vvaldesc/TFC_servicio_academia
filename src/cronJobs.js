@@ -52,7 +52,7 @@ export const scheduleFirstDayOfMonth = async () => {
 };
 
 try {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 50000));
   await axios.get(`${url}:${port}/api/misc/ping/ping`);
   scheduleUpdateDetails();
   scheduleFirstDayOfMonth();
