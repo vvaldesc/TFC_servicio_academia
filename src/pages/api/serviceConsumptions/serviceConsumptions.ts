@@ -103,6 +103,9 @@ export const POST: APIRoute = async (request) => {
       result.table= "ServiceConsumption";
       result.count = 1;
 
+      console.log('result');
+      console.log(result);
+
       if (serviceConsumptions.mode !== 'Silent'){
         const mailParamsCliente: mailParams = {
           price: serviceConsumptions.price,

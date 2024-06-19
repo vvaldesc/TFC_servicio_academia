@@ -46,21 +46,6 @@ export default async function seed() {
       
     },
     { 
-      id: 3,
-      name: 'Michael Brown', 
-      surname: 'Brown', 
-      email: 'michaelbrown@example.com', 
-      phone_number: '333333333', 
-      address: '987 Maple St', 
-      city: 'Seattle', 
-      bornDate: new Date('1970-01-01'), 
-      created_at: new Date(), 
-      updated_at: new Date(), 
-      username: 'michaelbrown',  
-      image: 'https://th.bing.com/th/id/R.636fe924035c8adfacdc45693c21db94?rik=3s8CyZiJBqaDbw&pid=ImgRaw&r=0', 
-      active: true 
-    },
-    { 
       id: 4,
       name: 'Sarah Davis', 
       surname: 'Davis', 
