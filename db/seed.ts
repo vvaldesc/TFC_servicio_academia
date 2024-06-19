@@ -6,11 +6,9 @@ import { db, Clients, StudentSubjectMensuality,
 import { Weather } from '../src/consts/types';
 
 export default async function seed() {
-
   let today = new Date();
   today.setHours(22, 0, 0, 0); // 20 es para las 8 de la tarde
   today.setDate(today.getDate()+1);
-
   const teacherRecords = [
     {   
       id: 1,
@@ -44,6 +42,22 @@ export default async function seed() {
       active: true,
       is_admin: true
       
+    },
+    { 
+      id: 3,
+      name: 'Robert Smith', 
+      surname: 'Smith', 
+      email: 'robert.smith@escuela.es',
+      phone_number: '333333333', 
+      address: '123 Oak St', 
+      city: 'Los Angeles', 
+      bornDate: new Date('1980-05-15'), 
+      created_at: new Date(), 
+      updated_at: new Date(), 
+      username: 'robertsmith',  
+      image: 'https://static9.depositphotos.com/1070812/1091/i/450/depositphotos_10916856-stock-photo-teacher-on-background-of-blackboard.jpg', 
+      active: true,
+      is_admin: false
     },
     { 
       id: 4,
@@ -715,6 +729,43 @@ export default async function seed() {
   ]);
   console.log('Courses inserted');
 
+  async function insertEmployees() {
+    // Prepare array for all employees
+    const employees = [];
+    // Prepare teachers
+    const teachers = [
+        { teacher_id: 1, social_security: "123456789" },
+        { teacher_id: 2, social_security: "987654321", salary: 1200 },
+        { teacher_id: 3, social_security: "111111111", salary: 1600 },
+        { teacher_id: 4, social_security: "222222222", salary: 1400 }
+    ];
+    // Add teachers to employees array
+    employees.push(...teachers);
+    // Prepare students
+    for (let i = 1; i <= 20; i++) {
+        const student = {
+            student_id: i,
+            social_security: (i + 200000000).toString(),
+        };
+        // Add each student to employees array
+        employees.push(student);
+    }
+    // Insert all employees
+    await db.insert(Employees).values(employees);
+  }
+  insertEmployees();
+  console.log('Employees inserted');
+
+  await db.insert(Servers).values([
+    {
+      nickname: 'server1',
+      IP: 'localhost',
+      Port: 4321,
+    }
+  ]);
+  console.log('Servers inserted');
+
+  console.log('Inserting students...');
   await db.insert(Subjects).values([
     // Asignaturas para el curso de Peluquería
     {
@@ -806,42 +857,6 @@ export default async function seed() {
     },
   ]);
   console.log('Subjects inserted');
-
-  async function insertEmployees() {
-    // Prepare array for all employees
-    const employees = [];
-    // Prepare teachers
-    const teachers = [
-        { teacher_id: 1, social_security: "123456789" },
-        { teacher_id: 2, social_security: "987654321", salary: 1200 },
-        { teacher_id: 3, social_security: "111111111", salary: 1600 },
-        { teacher_id: 4, social_security: "222222222", salary: 1400 }
-    ];
-    // Add teachers to employees array
-    employees.push(...teachers);
-    // Prepare students
-    for (let i = 1; i <= 20; i++) {
-        const student = {
-            student_id: i,
-            social_security: (i + 200000000).toString(),
-        };
-        // Add each student to employees array
-        employees.push(student);
-    }
-    // Insert all employees
-    await db.insert(Employees).values(employees);
-    console.log({'Employees inserted': employees});
-  }
-  insertEmployees();
-
-  await db.insert(Servers).values([
-    {
-      nickname: 'server1',
-      IP: 'localhost',
-      Port: 4321,
-    }
-  ]);
-  console.log('Servers inserted');
 
   const EmployeePayrollsGenerator = async () => {
     // Genera las fechas de cada mes desde enero hasta hoy

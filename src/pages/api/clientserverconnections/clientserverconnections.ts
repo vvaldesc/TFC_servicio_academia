@@ -1,7 +1,7 @@
 import { ClientServerConnections, db } from "astro:db";
 import fetchIPData from "../../../services/fetch/postiplocator";
 
-export const POST = async (request: Request) => {
+export const POST = async (request: any) => {
   try {
     const { clientAddress } = request;
     let result: any = {
@@ -11,6 +11,9 @@ export const POST = async (request: Request) => {
     };
     let clientServerConnection;
     const date = new Date();
+
+    console.log(clientAddress);
+
     const insertQuery = async (local: string) => {
       return db
         .insert(ClientServerConnections)
@@ -37,6 +40,7 @@ export const POST = async (request: Request) => {
       },
     });
   } catch (error) {
+  //@ts-ignore
     return new Response(JSON.stringify({ error: error.message }), {
       status: 200,
       headers: {
