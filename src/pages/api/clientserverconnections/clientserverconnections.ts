@@ -15,24 +15,31 @@ export const POST = async (request: any) => {
     console.log(clientAddress);
 
     const insertQuery = async (local: string) => {
+      console.log(local);
+      const row = {
+        server_nick: "server1",
+        estimated_client_location: local,
+        device_type: "smartphone",
+        file_download: "https://example.com/file.pdf",
+        created_at: date,
+        client_IP: clientAddress,
+      }
       return db
         .insert(ClientServerConnections)
-        .values(clientAddress)
-        .onConflictDoUpdate({
-          target: ClientServerConnections.id,
-          set: {
-            server_nick: "server1",
-            estimated_client_location: local,
-            device_type: "smartphone",
-            file_download: "https://example.com/file.pdf",
-            created_at: date,
-            client_IP: clientAddress,
-          },
-        });
+        .values(row);
     };
-    fetchIPData(clientAddress)
+
+    if (clientAddress === "::1") {
+      insertQuery('Localhost')
+    } else {
+      fetchIPData(clientAddress)
       .then(() => insertQuery(clientAddress))
-      .catch((error) => console.log('error'));
+      .catch((error) => {
+        // console.log('error')
+      });
+    }
+
+
     return new Response(JSON.stringify({ result }), {
       status: 200,
       headers: {

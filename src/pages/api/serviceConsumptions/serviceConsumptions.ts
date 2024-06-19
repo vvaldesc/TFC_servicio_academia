@@ -183,7 +183,7 @@ export const PUT: APIRoute = async (request) => {
     console.log(updateParams)
 
     let response;
-    if (updateParams.id && updateParams.cronUpdate) {
+    if (updateParams.cronUpdate) {
       console.log({'updateParams':updateParams});
       if (updateParams.firstTime === false ){
 
@@ -262,7 +262,7 @@ export const PUT: APIRoute = async (request) => {
         employee_email: updateParams.employee_email,
         client_name: updateParams.client_email,
         client_email: updateParams.client_name,
-        receptor_email: updateParams.employee_mail,
+        receptor_email: updateParams.employee_email,
         feedback: false,
         ServiceConsumption_id: updateParams.service_id,
       };

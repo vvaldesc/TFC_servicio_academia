@@ -148,7 +148,6 @@ const ClientServerConnections = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
     server_nick: column.text({ references: () => Servers.columns.nickname }),
-    client_id: column.number({ references: () => Clients.columns.id }),
     estimated_client_location: column.text({ optional: true }),
     device_type: column.text({ optional: true }),
     file_download: column.text({ optional: true }),
