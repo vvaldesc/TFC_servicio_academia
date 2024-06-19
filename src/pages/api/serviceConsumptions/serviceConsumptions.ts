@@ -88,7 +88,9 @@ export const POST: APIRoute = async (request) => {
     //@ts-ignore
     serviceConsumptions.updated_at = dateActual;
     //@ts-ignore
-    serviceConsumptions.reserved_at = new Date(serviceConsumptions.reserved_at); // Corregido aquí
+    serviceConsumptions.reserved_at = new Date(serviceConsumptions.reserved_at);
+
+    console.log(serviceConsumptions);
 
     const response = await db.insert(ServiceConsumption).values(serviceConsumptions).onConflictDoUpdate({
       target: ServiceConsumption.id,
@@ -113,11 +115,12 @@ export const POST: APIRoute = async (request) => {
           message: `Buenas ${serviceConsumptions.client_name} su cita con ${serviceConsumptions.employee_name} para ${serviceConsumptions.service_name} ha sido reservada para el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
           subject: 'Tu reserva ha sido realizada con éxito',
           employee_name: serviceConsumptions.employee_name,
-          employee_mail: serviceConsumptions.employee_mail,
+          employee_email: serviceConsumptions.employee_email,
           client_name: serviceConsumptions.client_email,
           client_email: serviceConsumptions.client_name,
           receptor_email: serviceConsumptions.client_email,
-          feedback: true,
+          ServiceConsumption_id: serviceConsumptions.service_id,
+          feedback: false,
         };
   
         const mailParamsEployee: mailParams = {
@@ -126,11 +129,12 @@ export const POST: APIRoute = async (request) => {
           message: `Buenas ${serviceConsumptions.employee_name} tiene cita para ${serviceConsumptions.service_name} con ${serviceConsumptions.client_name} el día ${serviceConsumptions.reserved_at.toLocaleDateString()} a las ${serviceConsumptions.reserved_at.toLocaleTimeString()}`,
           subject: 'Tienes una nueva cita',
           employee_name: serviceConsumptions.employee_name,
-          employee_mail: serviceConsumptions.employee_mail,
+          employee_email: serviceConsumptions.employee_email,
           client_name: serviceConsumptions.client_email,
           client_email: serviceConsumptions.client_name,
-          receptor_email: serviceConsumptions.employee_mail,
-          feedback: true,
+          receptor_email: serviceConsumptions.employee_email,
+          ServiceConsumption_id: serviceConsumptions.service_id,
+          feedback: false,
         };
   
         console.log(mailParamsCliente);
@@ -241,10 +245,12 @@ export const PUT: APIRoute = async (request) => {
         message: `Buenas ${updateParams.client_name} su cita con ${updateParams.employee_name} para ${updateParams.service_name} ha sido cancelada, reservada el día ${updateParams.reserved_at.toLocaleDateString()} a las ${updateParams.reserved_at.toLocaleTimeString()}`,
         subject: 'Cita cancelada',
         employee_name: updateParams.employee_name,
-        employee_mail: updateParams.employee_mail,
+        employee_email: updateParams.employee_email,
         client_name: updateParams.client_email,
         client_email: updateParams.client_name,
         receptor_email: updateParams.client_email,
+        feedback: false,
+        ServiceConsumption_id: updateParams.service_id,
       };
 
       const mailParamsEployee: mailParams = {
@@ -253,10 +259,12 @@ export const PUT: APIRoute = async (request) => {
         message: `Buenas ${updateParams.employee_name} su cita con ${updateParams.client_name} para ${updateParams.service_name} ha sido cancelada, reservada el día ${updateParams.reserved_at.toLocaleDateString()} a las ${updateParams.reserved_at.toLocaleTimeString()}`,
         subject: 'Cita cancelada',
         employee_name: updateParams.employee_name,
-        employee_mail: updateParams.employee_mail,
+        employee_email: updateParams.employee_email,
         client_name: updateParams.client_email,
         client_email: updateParams.client_name,
         receptor_email: updateParams.employee_mail,
+        feedback: false,
+        ServiceConsumption_id: updateParams.service_id,
       };
 
       console.log(mailParamsCliente);

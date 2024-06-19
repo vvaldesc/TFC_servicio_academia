@@ -10,7 +10,7 @@ export interface mailParams {
   message: string | null | undefined;
   subject: string;
   employee_name?: string;
-  employee_mail?: string;
+  employee_email?: string;
   client_name?: string;
   client_email?: string;
   receptor_email?: string;
