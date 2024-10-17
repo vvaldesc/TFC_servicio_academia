@@ -1,0 +1,782 @@
+{
+	"info": {
+		"_postman_id": "2dd483cf-54b9-407d-94e5-3fe210745438",
+		"name": "Academia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32593911"
+	},
+	"item": [
+		{
+			"name": "Todos los clientes",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/clients/clients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"clients",
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente por id",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/clients/id/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"clients",
+						"id",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente por email",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/clients/email/victorvaldescobos@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"clients",
+						"email",
+						"victorvaldescobos@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todos los detalles servicio",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/serviceConsumptions/serviceConsumptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"serviceConsumptions",
+						"serviceConsumptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Predicción",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "            {\r\n                \"id\": 1,\r\n                \"client_id\": 1,\r\n                \"teacher_id\": 2,\r\n                \"student_id\": null,\r\n                \"delay\": null,\r\n                \"service_id\": 1,\r\n                \"created_at\": \"2022-07-16T22:00:00.000Z\",\r\n                \"updated_at\": null,\r\n                \"reserved_at\": \"2024-05-28T17:10:09.133Z\",\r\n                \"rating\": null,\r\n                \"price\": 5,\r\n                \"weather\": \"Snowy\",\r\n                \"client_name\": \"John Doe\",\r\n                \"teacher_name\": \"Emily Johnson\",\r\n                \"student_name\": null,\r\n                \"client_surname\": \"Doe\",\r\n                \"teacher_surname\": \"Johnson\",\r\n                \"student_surname\": null,\r\n                \"client_address\": \"123 Main St\",\r\n                \"teacher_address\": \"321 Pine St\",\r\n                \"student_address\": null,\r\n                \"client_phone_number\": \"123456789\",\r\n                \"teacher_phone_number\": \"222222222\",\r\n                \"student_phone_number\": null,\r\n                \"client_email\": \"victorvaldescobos@gmail.com\",\r\n                \"teacher_email\": \"emilyjohnson@example.com\",\r\n                \"student_email\": null,\r\n                \"employee_salary\": 400\r\n            }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/estimatedtime",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"estimatedtime"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Predicción Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "            {\r\n                \"id\": 1,\r\n                \"client_id\": 1,\r\n                \"teacher_id\": 2,\r\n                \"student_id\": null,\r\n                \"delay\": null,\r\n                \"service_id\": 1,\r\n                \"created_at\": \"2022-07-16T22:00:00.000Z\",\r\n                \"updated_at\": null,\r\n                \"reserved_at\": \"2024-05-28T17:10:09.133Z\",\r\n                \"rating\": null,\r\n                \"price\": 5,\r\n                \"weather\": \"Snowy\",\r\n                \"client_name\": \"John Doe\",\r\n                \"teacher_name\": \"Emily Johnson\",\r\n                \"student_name\": null,\r\n                \"client_surname\": \"Doe\",\r\n                \"teacher_surname\": \"Johnson\",\r\n                \"student_surname\": null,\r\n                \"client_address\": \"123 Main St\",\r\n                \"teacher_address\": \"321 Pine St\",\r\n                \"student_address\": null,\r\n                \"client_phone_number\": \"123456789\",\r\n                \"teacher_phone_number\": \"222222222\",\r\n                \"student_phone_number\": null,\r\n                \"client_email\": \"victorvaldescobos@gmail.com\",\r\n                \"teacher_email\": \"emilyjohnson@example.com\",\r\n                \"student_email\": null,\r\n                \"employee_salary\": 400\r\n            }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/estimatedtime",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"estimatedtime"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Predicción test y entrenamiento",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "            {\r\n                \"id\": 1,\r\n                \"client_id\": 1,\r\n                \"teacher_id\": 2,\r\n                \"student_id\": null,\r\n                \"delay\": null,\r\n                \"service_id\": 1,\r\n                \"created_at\": \"2022-07-16T22:00:00.000Z\",\r\n                \"updated_at\": null,\r\n                \"reserved_at\": \"2024-05-28T17:10:09.133Z\",\r\n                \"rating\": null,\r\n                \"price\": 5,\r\n                \"weather\": \"Snowy\",\r\n                \"client_name\": \"John Doe\",\r\n                \"teacher_name\": \"Emily Johnson\",\r\n                \"student_name\": null,\r\n                \"client_surname\": \"Doe\",\r\n                \"teacher_surname\": \"Johnson\",\r\n                \"student_surname\": null,\r\n                \"client_address\": \"123 Main St\",\r\n                \"teacher_address\": \"321 Pine St\",\r\n                \"student_address\": null,\r\n                \"client_phone_number\": \"123456789\",\r\n                \"teacher_phone_number\": \"222222222\",\r\n                \"student_phone_number\": null,\r\n                \"client_email\": \"victorvaldescobos@gmail.com\",\r\n                \"teacher_email\": \"emilyjohnson@example.com\",\r\n                \"student_email\": null,\r\n                \"employee_salary\": 400\r\n            }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/estimatedtime/train",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"estimatedtime",
+						"train"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Perfil por email",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/misc/profile/email/victorvaldescobos@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"misc",
+						"profile",
+						"email",
+						"victorvaldescobos@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear cliente",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "            {\r\n                \"name\": \"John Doe\",\r\n                \"surname\": \"Doe\",\r\n                \"email\": \"ejemplo@gmail.com\",\r\n                \"phone_number\": \"123456789\",\r\n                \"address\": \"123 Main St\",\r\n                \"city\": \"New York\",\r\n                \"bornDate\": \"1990-01-01T00:00:00.000Z\",\r\n                \"created_at\": \"2024-05-16T18:20:08.795Z\",\r\n                \"updated_at\": \"2024-05-16T18:20:08.795Z\",\r\n                \"username\": \"johndoe\",\r\n                \"password\": \"password123\",\r\n                \"confirmed\": true,\r\n                \"image\": \"https://example.com/johndoe.jpg\",\r\n                \"active\": false\r\n            }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/clients/clients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"clients",
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear cliente 2",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "            {\r\n                \"name\": \"John Does\",\r\n                \"surname\": \"Doed\",\r\n                \"email\": \"ejempslo@gmail.com\",\r\n                \"phone_number\": \"1234567849\",\r\n                \"address\": \"123 Main St\",\r\n                \"city\": \"New York\",\r\n                \"bornDate\": \"1990-01-01T00:00:00.000Z\",\r\n                \"created_at\": \"2024-05-16T18:20:08.795Z\",\r\n                \"updated_at\": \"2024-05-16T18:20:08.795Z\",\r\n                \"username\": \"johndoed\",\r\n                \"password\": \"password123\",\r\n                \"confirmed\": true,\r\n                \"image\": \"https://example.com/johndoe.jpg\",\r\n                \"active\": false\r\n            }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/clients/clients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"clients",
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todos los detalles servicio",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/serviceConsumptions/serviceConsumptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"serviceConsumptions",
+						"serviceConsumptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear detalle servicio",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "            {\r\n                \"service_id\": 1,\r\n                \"employee_id\": 1,\r\n                \"client_id\": 1,\r\n                \"rating\": 4,\r\n                \"price\": 25,\r\n                \"delay\": 5,\r\n                \"created_at\": \"2024-09-21T17:55:50.094Z\",\r\n                \"updated_at\": \"2024-05-21T17:55:50.094Z\"\r\n            }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/serviceConsumptions/serviceConsumptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"serviceConsumptions",
+						"serviceConsumptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todas las reservas",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/reservations/reservations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"reservations",
+						"reservations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todos los perfiles",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/misc/profile/profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"misc",
+						"profile",
+						"profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todos los empleados",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/employees/employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"employees",
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Empleados disponibles",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "                {\"date\": \"2024-05-24T20:00:00.000Z\"}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/employees/availableEmployees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"employees",
+						"availableEmployees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ping",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/misc/ping/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"misc",
+						"ping",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todas las matrículas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/studentsubjectenrolments/studentsubjectenrolments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"studentsubjectenrolments",
+						"studentsubjectenrolments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "balance",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/misc/balance/balance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"misc",
+						"balance",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Nóminas",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/employeepayrolls/employeepayrolls",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"employeepayrolls",
+						"employeepayrolls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Semanal citas",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/misc/weekly_details_report/weekly_details_report",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"misc",
+						"weekly_details_report",
+						"weekly_details_report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "firstofthemonth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    cronUpdate: true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/misc/firstofthemonth/firstofthemonth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"misc",
+						"firstofthemonth",
+						"firstofthemonth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Faltas",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/studentsubjectfaults/studentsubjectfaults",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"studentsubjectfaults",
+						"studentsubjectfaults"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todos los servicios",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4321/api/services/services",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"services",
+						"services"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "todas las mensualidades",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    cronUpdate: true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/studentsubjectmensuality/studentsubjectmensuality",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"studentsubjectmensuality",
+						"studentsubjectmensuality"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar citas",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"cronUpdate\": true\r\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/serviceConsumptions/serviceConsumptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"serviceConsumptions",
+						"serviceConsumptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar profesor",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":2,\r\n    \"surname\": \"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/teachers/teachers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"teachers",
+						"teachers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar citas no mail",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"cronUpdate\": true,\r\n        \"firstTime\": true\r\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/serviceConsumptions/serviceConsumptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"serviceConsumptions",
+						"serviceConsumptions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
